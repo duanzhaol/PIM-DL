@@ -6,7 +6,7 @@ import torch
 import torch.nn as nn
 from datasets import Dataset
 
-from examples.run_luterize_causal_lm_no_trainer import build_tokenized_lm_datasets, enable_gradient_checkpointing_if_requested, group_texts, sum_lut_loss
+from examples.run_luterize_causal_lm_no_trainer import build_tokenized_lm_datasets, enable_gradient_checkpointing_if_requested, group_texts, should_log_interval, sum_lut_loss
 from examples.run_luterize_causal_lm_no_trainer import load_raw_datasets, parse_args
 
 
@@ -35,6 +35,20 @@ def test_sum_lut_loss_adds_modules_with_lut_loss():
     loss = sum_lut_loss(model, device=torch.device("cpu"))
 
     assert loss.item() == 4.0
+
+
+def test_progress_log_interval_logs_first_and_requested_interval():
+    assert should_log_interval(1, 10)
+    assert not should_log_interval(9, 10)
+    assert should_log_interval(10, 10)
+    assert not should_log_interval(1, 0)
+
+
+def test_progress_logging_defaults_are_chatty_enough_for_long_initial_eval():
+    args = parse_args([])
+
+    assert args.eval_logging_steps == 1
+    assert args.microbatch_logging_steps == 1
 
 
 class DummyCheckpointModel:

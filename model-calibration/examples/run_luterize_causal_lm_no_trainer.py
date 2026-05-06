@@ -6,6 +6,7 @@ import math
 import os
 import random
 import sys
+import time
 from pathlib import Path
 
 REPO_PACKAGE_ROOT = Path(__file__).resolve().parents[1]
@@ -67,6 +68,8 @@ def parse_args(input_args=None):
     parser.add_argument("--max_train_steps", type=int, default=100)
     parser.add_argument("--eval_steps", type=int, default=50)
     parser.add_argument("--logging_steps", type=int, default=10)
+    parser.add_argument("--eval_logging_steps", type=int, default=1)
+    parser.add_argument("--microbatch_logging_steps", type=int, default=1)
     parser.add_argument("--max_eval_batches", type=int, default=None)
     parser.add_argument("--seed", type=int, default=None)
     parser.add_argument("--centroid_path", type=str, default=None)
@@ -114,6 +117,10 @@ def sum_lut_loss(model, device):
     if not losses:
         return torch.zeros((), dtype=torch.float32, device=device)
     return torch.stack([loss.to(device) for loss in losses]).sum()
+
+
+def should_log_interval(step, interval):
+    return interval > 0 and (step == 1 or step % interval == 0)
 
 
 class TokenizedCausalLMDataset:
@@ -236,6 +243,13 @@ def build_lm_datasets(args, tokenizer, accelerator):
     return lm_datasets
 
 
+def dataset_length(dataset):
+    try:
+        return len(dataset)
+    except TypeError:
+        return "unknown"
+
+
 def build_dataloaders(args, lm_datasets):
     train_dataloader = DataLoader(
         lm_datasets["train"],
@@ -340,16 +354,33 @@ def save_lut_state(model, tokenizer, args, accelerator):
         json.dump(vars(args), f, indent=2, sort_keys=True)
 
 
+def max_eval_step_count(eval_dataloader, args):
+    dataloader_len = len(eval_dataloader)
+    if args.max_eval_batches is None:
+        return dataloader_len
+    return min(args.max_eval_batches, dataloader_len)
+
+
 @torch.no_grad()
-def evaluate(model, eval_dataloader, accelerator, args):
+def evaluate(model, eval_dataloader, accelerator, args, label="eval"):
     model.eval()
     losses = []
+    total_eval_steps = max_eval_step_count(eval_dataloader, args)
+    start_time = time.perf_counter()
+    accelerator.print(f"{label}: starting {total_eval_steps} eval batch(es)")
     for step, batch in enumerate(eval_dataloader):
         if args.max_eval_batches is not None and step >= args.max_eval_batches:
             break
         outputs = model(**batch)
         loss = outputs.loss.detach().float().reshape(1)
         losses.append(accelerator.gather_for_metrics(loss))
+        current_step = step + 1
+        if should_log_interval(current_step, args.eval_logging_steps):
+            elapsed = time.perf_counter() - start_time
+            accelerator.print(
+                f"{label}: finished eval batch {current_step}/{total_eval_steps}, "
+                f"loss={loss.item():.6f}, elapsed={elapsed:.1f}s"
+            )
 
     if not losses:
         return float("nan"), float("nan")
@@ -360,6 +391,8 @@ def evaluate(model, eval_dataloader, accelerator, args):
     except OverflowError:
         perplexity = float("inf")
     model.train()
+    elapsed = time.perf_counter() - start_time
+    accelerator.print(f"{label}: completed in {elapsed:.1f}s")
     return eval_loss, perplexity
 
 
@@ -375,10 +408,12 @@ def main():
     if args.seed is not None:
         torch.manual_seed(args.seed)
 
+    accelerator.print(f"Loading tokenizer from {args.model_name_or_path}")
     tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path, use_fast=True)
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
 
+    accelerator.print(f"Loading model from {args.model_name_or_path} with dtype={args.torch_dtype}")
     model = AutoModelForCausalLM.from_pretrained(
         args.model_name_or_path,
         torch_dtype=resolve_torch_dtype(args.torch_dtype),
@@ -386,8 +421,10 @@ def main():
     )
     model.config.use_cache = False
     if args.gradient_checkpointing:
+        accelerator.print("Enabling gradient checkpointing")
         enable_gradient_checkpointing_if_requested(model, args)
 
+    accelerator.print(f"Replacing target Linear modules with LUTLinear_t modules: target_modules={args.target_modules}")
     model = apply_lut_replacement(model, args)
     loaded_centroids = load_centroids_if_requested(model, args.centroid_path)
     trainable_params, lut_module_count, trainable_centroid_count = configure_trainable_parameters(model, args)
@@ -397,8 +434,18 @@ def main():
         f"trainable centroid values: {trainable_centroid_count}"
     )
 
+    accelerator.print("Building LM datasets and dataloaders")
     lm_datasets = build_lm_datasets(args, tokenizer, accelerator)
+    accelerator.print(
+        f"Dataset sizes: train={dataset_length(lm_datasets['train'])}, "
+        f"validation={dataset_length(lm_datasets['validation'])}, "
+        f"max_seq_length={args.max_seq_length}"
+    )
     train_dataloader, eval_dataloader = build_dataloaders(args, lm_datasets)
+    accelerator.print(
+        f"Dataloader batches: train={len(train_dataloader)}, validation={len(eval_dataloader)}, "
+        f"gradient_accumulation_steps={args.gradient_accumulation_steps}, max_train_steps={args.max_train_steps}"
+    )
 
     optimizer = AdamW(trainable_params, lr=args.learning_rate, weight_decay=args.weight_decay)
     lr_scheduler = get_scheduler(
@@ -408,6 +455,7 @@ def main():
         num_training_steps=args.max_train_steps,
     )
 
+    accelerator.print("Preparing model, optimizer, dataloaders, and scheduler with Accelerate")
     model, optimizer, train_dataloader, eval_dataloader, lr_scheduler = accelerator.prepare(
         model,
         optimizer,
@@ -416,14 +464,24 @@ def main():
         lr_scheduler,
     )
 
-    initial_eval_loss, initial_ppl = evaluate(model, eval_dataloader, accelerator, args)
+    initial_eval_loss, initial_ppl = evaluate(model, eval_dataloader, accelerator, args, label="initial_eval")
     accelerator.print(f"Initial eval loss: {initial_eval_loss:.6f}, perplexity: {initial_ppl:.6f}")
 
     progress_bar = tqdm(range(args.max_train_steps), disable=not accelerator.is_local_main_process)
     completed_steps = 0
+    microbatch_steps = 0
+    train_start_time = time.perf_counter()
     model.train()
+    accelerator.print("Starting training loop")
     while completed_steps < args.max_train_steps:
         for batch in train_dataloader:
+            microbatch_steps += 1
+            if should_log_interval(microbatch_steps, args.microbatch_logging_steps):
+                elapsed = time.perf_counter() - train_start_time
+                accelerator.print(
+                    f"train microbatch {microbatch_steps}: "
+                    f"optimizer_step={completed_steps + 1}/{args.max_train_steps}, elapsed={elapsed:.1f}s"
+                )
             with accelerator.accumulate(model):
                 outputs = model(**batch)
                 model_loss = outputs.loss
@@ -437,21 +495,25 @@ def main():
             if accelerator.sync_gradients:
                 completed_steps += 1
                 progress_bar.update(1)
-                if completed_steps % args.logging_steps == 0:
+                if should_log_interval(completed_steps, args.logging_steps):
+                    elapsed = time.perf_counter() - train_start_time
                     accelerator.print(
                         f"step {completed_steps}: model_loss={model_loss.detach().float().item():.6f}, "
                         f"lut_loss={lut_loss.detach().float().item():.6f}, "
-                        f"total_loss={loss.detach().float().item():.6f}"
+                        f"total_loss={loss.detach().float().item():.6f}, "
+                        f"elapsed={elapsed:.1f}s"
                     )
                 if args.eval_steps > 0 and completed_steps % args.eval_steps == 0:
-                    eval_loss, ppl = evaluate(model, eval_dataloader, accelerator, args)
+                    eval_loss, ppl = evaluate(model, eval_dataloader, accelerator, args, label=f"eval_step_{completed_steps}")
                     accelerator.print(f"eval step {completed_steps}: loss={eval_loss:.6f}, perplexity={ppl:.6f}")
                 if completed_steps >= args.max_train_steps:
                     break
 
-    final_eval_loss, final_ppl = evaluate(model, eval_dataloader, accelerator, args)
+    final_eval_loss, final_ppl = evaluate(model, eval_dataloader, accelerator, args, label="final_eval")
     accelerator.print(f"Final eval loss: {final_eval_loss:.6f}, perplexity: {final_ppl:.6f}")
+    accelerator.print(f"Saving LUT state and tokenizer to {args.output_dir}")
     save_lut_state(model, tokenizer, args, accelerator)
+    accelerator.print("Training complete")
 
 
 if __name__ == "__main__":
