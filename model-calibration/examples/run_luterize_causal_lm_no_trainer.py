@@ -269,7 +269,7 @@ def enable_gradient_checkpointing_if_requested(model, args):
     if not args.gradient_checkpointing:
         return
 
-    model.gradient_checkpointing_enable()
+    model.gradient_checkpointing_enable(gradient_checkpointing_kwargs={"use_reentrant": False})
     if hasattr(model, "enable_input_require_grads"):
         model.enable_input_require_grads()
 
