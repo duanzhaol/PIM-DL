@@ -78,21 +78,22 @@ class LUTLinear_t(nn.Module):
 
         print('all shape: ', x.shape, self.centroids.shape, self.weight.shape) if self.debug else None
 
-        x_flat = x.reshape(batch * seq_len, self.ncodebooks, self.vec_len).permute(1, 0, 2).to(torch.float32)
-        weight_flat = self.weight.reshape(self.ncodebooks, self.vec_len, self.out_features).to(torch.float32)
+        x_tokens = x.reshape(batch * seq_len, self.in_features).to(torch.float32)
+        x_codebooks = x_tokens.reshape(batch * seq_len, self.ncodebooks, self.vec_len).permute(1, 0, 2)
+        weight = self.weight.to(torch.float32)
         centroids = self.centroids.weight.reshape(self.ncodebooks, self.ncentroids, self.vec_len).to(torch.float32)
-        soft_output = torch.bmm(x_flat, weight_flat).sum(0)
+        soft_output = x_tokens.matmul(weight)
 
-        dist = torch.cdist(x_flat, centroids, p=float(self.distance_p))
+        dist = torch.cdist(x_codebooks, centroids, p=float(self.distance_p))
         min_indices = dist.argmin(dim=-1)
 
-        lut = torch.bmm(centroids, weight_flat)
-        selected_lut = torch.gather(
-            lut,
+        selected_centroids = torch.gather(
+            centroids,
             1,
-            min_indices.unsqueeze(-1).expand(-1, -1, self.out_features),
+            min_indices.unsqueeze(-1).expand(-1, -1, self.vec_len),
         )
-        quant_output = selected_lut.sum(0)
+        quant_input = selected_centroids.permute(1, 0, 2).reshape(batch * seq_len, self.in_features)
+        quant_output = quant_input.matmul(weight)
 
         self.lut_loss = (torch.mean((quant_output.detach() - soft_output) ** 2) + torch.mean((quant_output - soft_output.detach()) ** 2))
 
