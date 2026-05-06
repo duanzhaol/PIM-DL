@@ -4,8 +4,9 @@ import sys
 
 import torch
 import torch.nn as nn
+from datasets import Dataset
 
-from examples.run_luterize_causal_lm_no_trainer import enable_gradient_checkpointing_if_requested, group_texts, sum_lut_loss
+from examples.run_luterize_causal_lm_no_trainer import build_tokenized_lm_datasets, enable_gradient_checkpointing_if_requested, group_texts, sum_lut_loss
 from examples.run_luterize_causal_lm_no_trainer import load_raw_datasets, parse_args
 
 
@@ -99,3 +100,41 @@ def test_load_raw_datasets_from_local_text_files(tmp_path):
     assert "validation" in raw_datasets
     assert raw_datasets["train"][0]["text"] == "hello world"
     assert raw_datasets["validation"][0]["text"] == "validation sample"
+
+
+def test_build_tokenized_lm_datasets_samples_saved_input_ids_and_adds_labels(tmp_path):
+    dataset_path = tmp_path / "tokenized"
+    Dataset.from_dict(
+        {
+            "input_ids": [
+                [1, 2, 3, 4],
+                [5, 6, 7, 8],
+                [9, 10, 11, 12],
+                [13, 14, 15, 16],
+                [17, 18, 19, 20],
+                [21, 22, 23, 24],
+            ],
+            "overflow_to_sample_mapping": [0, 1, 2, 3, 4, 5],
+        }
+    ).save_to_disk(dataset_path)
+    args = parse_args(
+        [
+            "--tokenized_dataset_path",
+            str(dataset_path),
+            "--max_train_samples",
+            "3",
+            "--max_eval_samples",
+            "2",
+            "--dataset_seed",
+            "7",
+        ]
+    )
+
+    lm_datasets = build_tokenized_lm_datasets(args)
+
+    assert len(lm_datasets["train"]) == 3
+    assert len(lm_datasets["validation"]) == 2
+    sample = lm_datasets["train"][0]
+    assert "overflow_to_sample_mapping" not in sample
+    assert sample["attention_mask"] == [1, 1, 1, 1]
+    assert sample["labels"] == sample["input_ids"]

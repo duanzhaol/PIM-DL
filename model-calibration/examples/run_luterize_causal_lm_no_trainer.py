@@ -4,6 +4,7 @@ import json
 import logging
 import math
 import os
+import random
 import sys
 from pathlib import Path
 
@@ -13,7 +14,7 @@ if str(REPO_PACKAGE_ROOT) not in sys.path:
 
 import torch
 from accelerate import Accelerator
-from datasets import load_dataset
+from datasets import DatasetDict, load_dataset, load_from_disk
 from torch.optim import AdamW
 from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
@@ -38,6 +39,11 @@ def parse_args(input_args=None):
     parser.add_argument("--dataset_config_name", type=str, default="wikitext-2-raw-v1")
     parser.add_argument("--train_file", type=str, default=None)
     parser.add_argument("--validation_file", type=str, default=None)
+    parser.add_argument("--tokenized_dataset_path", type=str, default=None)
+    parser.add_argument("--validation_tokenized_dataset_path", type=str, default=None)
+    parser.add_argument("--max_train_samples", type=int, default=None)
+    parser.add_argument("--max_eval_samples", type=int, default=None)
+    parser.add_argument("--dataset_seed", type=int, default=42)
     parser.add_argument("--text_column", type=str, default="text")
     parser.add_argument("--max_seq_length", type=int, default=512)
     parser.add_argument("--preprocessing_num_workers", type=int, default=None)
@@ -110,6 +116,76 @@ def sum_lut_loss(model, device):
     return torch.stack([loss.to(device) for loss in losses]).sum()
 
 
+class TokenizedCausalLMDataset:
+    def __init__(self, dataset, max_seq_length):
+        self.dataset = dataset
+        self.max_seq_length = max_seq_length
+
+    def __len__(self):
+        return len(self.dataset)
+
+    def __getitem__(self, index):
+        item = self.dataset[index]
+        if "input_ids" not in item:
+            raise ValueError(f"tokenized dataset item must contain 'input_ids', got columns {list(item)}")
+
+        input_ids = list(item["input_ids"])
+        if self.max_seq_length is not None:
+            input_ids = input_ids[: self.max_seq_length]
+        return {
+            "input_ids": input_ids,
+            "attention_mask": [1] * len(input_ids),
+            "labels": input_ids.copy(),
+        }
+
+
+def sample_dataset(dataset, max_samples, seed):
+    if max_samples is None or max_samples >= len(dataset):
+        return dataset
+    if max_samples <= 0:
+        raise ValueError("sample count must be positive")
+
+    rng = random.Random(seed)
+    indices = sorted(rng.sample(range(len(dataset)), max_samples))
+    return dataset.select(indices)
+
+
+def load_tokenized_dataset(path):
+    dataset = load_from_disk(path)
+    if isinstance(dataset, DatasetDict):
+        if "train" not in dataset:
+            raise ValueError(f"tokenized dataset dict at {path!r} must contain a train split")
+    return dataset
+
+
+def build_tokenized_lm_datasets(args):
+    if args.tokenized_dataset_path is None:
+        raise ValueError("tokenized_dataset_path is required for tokenized dataset loading")
+
+    loaded_dataset = load_tokenized_dataset(args.tokenized_dataset_path)
+    if isinstance(loaded_dataset, DatasetDict):
+        train_source = loaded_dataset["train"]
+        validation_source = loaded_dataset.get("validation", train_source)
+    else:
+        train_source = loaded_dataset
+        validation_source = loaded_dataset
+
+    if args.validation_tokenized_dataset_path is not None:
+        validation_loaded = load_tokenized_dataset(args.validation_tokenized_dataset_path)
+        validation_source = validation_loaded["validation"] if isinstance(validation_loaded, DatasetDict) else validation_loaded
+
+    train_dataset = sample_dataset(train_source, args.max_train_samples, args.dataset_seed)
+    validation_sample_count = args.max_eval_samples
+    if validation_sample_count is None and validation_source is train_source:
+        validation_sample_count = min(1024, len(validation_source))
+    validation_dataset = sample_dataset(validation_source, validation_sample_count, args.dataset_seed + 1)
+
+    return {
+        "train": TokenizedCausalLMDataset(train_dataset, args.max_seq_length),
+        "validation": TokenizedCausalLMDataset(validation_dataset, args.max_seq_length),
+    }
+
+
 def load_raw_datasets(args):
     if args.train_file is not None:
         data_files = {"train": args.train_file}
@@ -120,6 +196,9 @@ def load_raw_datasets(args):
 
 
 def build_lm_datasets(args, tokenizer, accelerator):
+    if args.tokenized_dataset_path is not None:
+        return build_tokenized_lm_datasets(args)
+
     raw_datasets = load_raw_datasets(args)
     if "validation" not in raw_datasets:
         raw_datasets["validation"] = load_dataset(
