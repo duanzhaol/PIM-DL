@@ -10,6 +10,7 @@ from functools import partial
 import os
 from typing import List
 import transformers
+from LUTNeuro.module_filter import should_luterize_module
 
 
 class LUTerize:
@@ -32,7 +33,8 @@ class LUTerize:
                 block_layer_list=[],
                 init_centroids=True,
                 fp16=False,
-                distance_p="2.0"):
+                distance_p="2.0",
+                target_modules="all_linear"):
    
         self.model = model
         self.dataloader = dataloader
@@ -57,6 +59,7 @@ class LUTerize:
         
         self.fp16 = fp16
         self.distance_p = distance_p
+        self.target_modules = target_modules
 
     def _hook(self, layer_name, module, input, output):
         key = f"{layer_name}"
@@ -163,15 +166,41 @@ class LUTerize:
                 self.logger.info(f'save {layer_name} centroids')
 
     def luterize_model(self):
+        excluded_linear_names = {
+            'pre_classifier',
+            'classifier_input',
+            'classifier',
+            'vocab_transform',
+            'vocab_projector',
+            'lm_head',
+        }
+
+        def _legacy_lut_layer_matches(layer_name):
+            if self.lut_layers == []:
+                return True
+            layer_name_parts = layer_name.split(".")
+            try:
+                layer_idx = int(layer_name_parts[3]) if len(layer_name_parts) > 4 else 'dense'
+            except (ValueError, IndexError):
+                layer_idx = 'dense'
+            return layer_idx in self.lut_layers
+
         def _replace_linear_with_lutlinear(module: nn.Module, name_parts: List[str] = None):
             if name_parts is None:
                 name_parts = []
             for name, child in module.named_children():
                 new_name_parts = name_parts + [name]
-                if isinstance(child, nn.Linear) and name not in ['pre_classifier', 'classifier_input', 'classifier', 'vocab_transform', 'vocab_projector', 'lm_head']:
-                    layer_name = ".".join(new_name_parts)
-                    layer_idx = int(layer_name.split(".")[3]) if len(layer_name.split(".")) > 4 else 'dense'
-                    if layer_idx in self.lut_layers or self.lut_layers == []:
+                layer_name = ".".join(new_name_parts)
+                if isinstance(child, nn.Linear):
+                    if self.target_modules in {"mlp", "attention", "all"}:
+                        should_replace = should_luterize_module(layer_name, self.target_modules)
+                    else:
+                        should_replace = (
+                            name not in excluded_linear_names
+                            and _legacy_lut_layer_matches(layer_name)
+                        )
+
+                    if should_replace:
                         ncodebook = int(child.in_features / (self.nsharecodebook * self.vec_len))
                         if self.weight_transpose:
                             lut_linear = LUTLinear_t( in_features=child.in_features, 
