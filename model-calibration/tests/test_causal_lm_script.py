@@ -52,6 +52,14 @@ def test_progress_logging_defaults_are_chatty_enough_for_long_initial_eval():
     assert args.microbatch_logging_steps == 1
 
 
+def test_baseline_eval_before_lut_flag_defaults_to_disabled():
+    args = parse_args([])
+    enabled_args = parse_args(["--baseline_eval_before_lut"])
+
+    assert not args.baseline_eval_before_lut
+    assert enabled_args.baseline_eval_before_lut
+
+
 def test_format_microbatch_log_includes_losses_after_forward():
     message = format_microbatch_log(
         microbatch_step=3,

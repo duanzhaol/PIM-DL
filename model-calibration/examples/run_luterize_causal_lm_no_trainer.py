@@ -72,6 +72,7 @@ def parse_args(input_args=None):
     parser.add_argument("--microbatch_logging_steps", type=int, default=1)
     parser.add_argument("--max_eval_batches", type=int, default=None)
     parser.add_argument("--seed", type=int, default=None)
+    parser.add_argument("--baseline_eval_before_lut", action="store_true")
     parser.add_argument("--centroid_path", type=str, default=None)
     parser.add_argument("--output_dir", type=str, default="serialization_dir/qwen3_lut")
     return parser.parse_args(input_args)
@@ -369,6 +370,13 @@ def max_eval_step_count(eval_dataloader, args):
     return min(args.max_eval_batches, dataloader_len)
 
 
+def move_batch_to_device(batch, device):
+    return {
+        key: value.to(device) if torch.is_tensor(value) else value
+        for key, value in batch.items()
+    }
+
+
 @torch.no_grad()
 def evaluate(model, eval_dataloader, accelerator, args, label="eval"):
     model.eval()
@@ -379,6 +387,7 @@ def evaluate(model, eval_dataloader, accelerator, args, label="eval"):
     for step, batch in enumerate(eval_dataloader):
         if args.max_eval_batches is not None and step >= args.max_eval_batches:
             break
+        batch = move_batch_to_device(batch, accelerator.device)
         outputs = model(**batch)
         loss = outputs.loss.detach().float().reshape(1)
         losses.append(accelerator.gather_for_metrics(loss))
@@ -404,6 +413,17 @@ def evaluate(model, eval_dataloader, accelerator, args, label="eval"):
     return eval_loss, perplexity
 
 
+def load_causal_lm_model(args, accelerator, label="model"):
+    accelerator.print(f"Loading {label} from {args.model_name_or_path} with dtype={args.torch_dtype}")
+    model = AutoModelForCausalLM.from_pretrained(
+        args.model_name_or_path,
+        torch_dtype=resolve_torch_dtype(args.torch_dtype),
+        low_cpu_mem_usage=True,
+    )
+    model.config.use_cache = False
+    return model
+
+
 def main():
     args = parse_args()
     logging.basicConfig(
@@ -421,13 +441,38 @@ def main():
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
 
-    accelerator.print(f"Loading model from {args.model_name_or_path} with dtype={args.torch_dtype}")
-    model = AutoModelForCausalLM.from_pretrained(
-        args.model_name_or_path,
-        torch_dtype=resolve_torch_dtype(args.torch_dtype),
-        low_cpu_mem_usage=True,
+    accelerator.print("Building LM datasets and dataloaders")
+    lm_datasets = build_lm_datasets(args, tokenizer, accelerator)
+    accelerator.print(
+        f"Dataset sizes: train={dataset_length(lm_datasets['train'])}, "
+        f"validation={dataset_length(lm_datasets['validation'])}, "
+        f"max_seq_length={args.max_seq_length}"
     )
-    model.config.use_cache = False
+    train_dataloader, eval_dataloader = build_dataloaders(args, lm_datasets)
+    accelerator.print(
+        f"Dataloader batches: train={len(train_dataloader)}, validation={len(eval_dataloader)}, "
+        f"gradient_accumulation_steps={args.gradient_accumulation_steps}, max_train_steps={args.max_train_steps}"
+    )
+
+    if args.baseline_eval_before_lut:
+        baseline_model = load_causal_lm_model(args, accelerator, label="baseline model")
+        baseline_model.to(accelerator.device)
+        baseline_eval_loss, baseline_ppl = evaluate(
+            baseline_model,
+            eval_dataloader,
+            accelerator,
+            args,
+            label="baseline_eval_before_lut",
+        )
+        accelerator.print(
+            f"Baseline eval before LUT replacement: loss={baseline_eval_loss:.6f}, "
+            f"perplexity={baseline_ppl:.6f}"
+        )
+        del baseline_model
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
+
+    model = load_causal_lm_model(args, accelerator)
     if args.gradient_checkpointing:
         accelerator.print("Enabling gradient checkpointing")
         enable_gradient_checkpointing_if_requested(model, args)
@@ -440,19 +485,6 @@ def main():
     accelerator.print(
         f"LUT modules: {lut_module_count}, loaded centroid tensors: {loaded_centroids}, "
         f"trainable centroid values: {trainable_centroid_count}"
-    )
-
-    accelerator.print("Building LM datasets and dataloaders")
-    lm_datasets = build_lm_datasets(args, tokenizer, accelerator)
-    accelerator.print(
-        f"Dataset sizes: train={dataset_length(lm_datasets['train'])}, "
-        f"validation={dataset_length(lm_datasets['validation'])}, "
-        f"max_seq_length={args.max_seq_length}"
-    )
-    train_dataloader, eval_dataloader = build_dataloaders(args, lm_datasets)
-    accelerator.print(
-        f"Dataloader batches: train={len(train_dataloader)}, validation={len(eval_dataloader)}, "
-        f"gradient_accumulation_steps={args.gradient_accumulation_steps}, max_train_steps={args.max_train_steps}"
     )
 
     optimizer = AdamW(trainable_params, lr=args.learning_rate, weight_decay=args.weight_decay)

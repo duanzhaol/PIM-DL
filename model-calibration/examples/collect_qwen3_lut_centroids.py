@@ -11,14 +11,20 @@ if str(REPO_PACKAGE_ROOT) not in sys.path:
 
 import torch
 from accelerate import Accelerator
-from datasets import load_dataset
+from datasets import DatasetDict, load_dataset
 from sklearn.cluster import MiniBatchKMeans
 from torch import nn
 from torch.utils.data import DataLoader
 from transformers import AutoModelForCausalLM, AutoTokenizer, default_data_collator
 
 from LUTNeuro.module_filter import should_luterize_module
-from examples.run_luterize_causal_lm_no_trainer import group_texts, resolve_torch_dtype
+from examples.run_luterize_causal_lm_no_trainer import (
+    TokenizedCausalLMDataset,
+    group_texts,
+    load_tokenized_dataset,
+    resolve_torch_dtype,
+    sample_dataset,
+)
 
 
 logger = logging.getLogger(__name__)
@@ -29,6 +35,9 @@ def parse_args(input_args=None):
     parser.add_argument("--model_name_or_path", type=str, default="Qwen/Qwen3-4B")
     parser.add_argument("--dataset_name", type=str, default="wikitext")
     parser.add_argument("--dataset_config_name", type=str, default="wikitext-2-raw-v1")
+    parser.add_argument("--tokenized_dataset_path", type=str, default=None)
+    parser.add_argument("--max_samples", type=int, default=None)
+    parser.add_argument("--dataset_seed", type=int, default=42)
     parser.add_argument("--text_column", type=str, default="text")
     parser.add_argument("--target_modules", choices=["mlp", "attention", "all"], default="mlp")
     parser.add_argument("--max_seq_length", type=int, default=256)
@@ -57,7 +66,23 @@ def activation_to_codebook_subvectors(activation, vec_len):
     return flat.reshape(-1, ncodebooks, vec_len).permute(1, 0, 2).contiguous()
 
 
+def build_tokenized_dataloader(args):
+    loaded_dataset = load_tokenized_dataset(args.tokenized_dataset_path)
+    source_dataset = loaded_dataset["train"] if isinstance(loaded_dataset, DatasetDict) else loaded_dataset
+    sampled_dataset = sample_dataset(source_dataset, args.max_samples, args.dataset_seed)
+    lm_dataset = TokenizedCausalLMDataset(sampled_dataset, args.max_seq_length)
+    return DataLoader(
+        lm_dataset,
+        shuffle=False,
+        collate_fn=default_data_collator,
+        batch_size=args.per_device_batch_size,
+    )
+
+
 def build_dataloader(args, tokenizer, accelerator):
+    if args.tokenized_dataset_path is not None:
+        return build_tokenized_dataloader(args)
+
     raw_dataset = load_dataset(args.dataset_name, args.dataset_config_name, split="train")
     column_names = raw_dataset.column_names
     if args.text_column not in column_names:
