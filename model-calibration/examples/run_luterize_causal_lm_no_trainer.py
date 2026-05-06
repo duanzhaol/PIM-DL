@@ -328,11 +328,11 @@ def load_centroids_if_requested(model, centroid_path):
     if centroid_path is None:
         return 0
 
-    try:
+    if str(centroid_path).endswith(".safetensors"):
         from safetensors.torch import load_file
 
         tensors = load_file(centroid_path)
-    except ValueError:
+    else:
         tensors = torch.load(centroid_path, map_location="cpu")
 
     loaded = 0

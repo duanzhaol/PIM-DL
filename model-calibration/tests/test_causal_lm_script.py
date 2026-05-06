@@ -7,7 +7,8 @@ import torch.nn as nn
 from datasets import Dataset
 from transformers import Qwen3Config, Qwen3ForCausalLM
 
-from examples.run_luterize_causal_lm_no_trainer import apply_lut_replacement, build_tokenized_lm_datasets, configure_trainable_parameters, enable_gradient_checkpointing_if_requested, format_microbatch_log, group_texts, should_log_interval, sum_lut_loss
+from LUTNeuro.LUTLinear_t import LUTLinear_t
+from examples.run_luterize_causal_lm_no_trainer import apply_lut_replacement, build_tokenized_lm_datasets, configure_trainable_parameters, enable_gradient_checkpointing_if_requested, format_microbatch_log, group_texts, load_centroids_if_requested, should_log_interval, sum_lut_loss
 from examples.run_luterize_causal_lm_no_trainer import load_raw_datasets, parse_args
 
 
@@ -147,6 +148,18 @@ def test_lut_centroids_receive_gradients_with_gradient_checkpointing():
     )
 
     assert centroid_grad_norm > 0
+
+
+def test_load_centroids_reads_torch_saved_pt_files(tmp_path):
+    model = nn.Sequential(LUTLinear_t(8, 4, bias=False, ncentroids=2, vec_len=4, distance_p="2.0"))
+    centroid_path = tmp_path / "centroids.pt"
+    expected_centroids = torch.arange(16, dtype=torch.float32).reshape(2, 8)
+    torch.save({"0.centroids.weight": expected_centroids}, centroid_path)
+
+    loaded = load_centroids_if_requested(model, str(centroid_path))
+
+    assert loaded == 1
+    assert torch.equal(model[0].centroids.weight, expected_centroids)
 
 
 def test_example_scripts_help_run_from_examples_path_without_pythonpath():
