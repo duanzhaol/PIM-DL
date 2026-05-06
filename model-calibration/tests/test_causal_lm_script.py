@@ -7,7 +7,7 @@ import torch.nn as nn
 from datasets import Dataset
 from transformers import Qwen3Config, Qwen3ForCausalLM
 
-from examples.run_luterize_causal_lm_no_trainer import apply_lut_replacement, build_tokenized_lm_datasets, configure_trainable_parameters, enable_gradient_checkpointing_if_requested, group_texts, should_log_interval, sum_lut_loss
+from examples.run_luterize_causal_lm_no_trainer import apply_lut_replacement, build_tokenized_lm_datasets, configure_trainable_parameters, enable_gradient_checkpointing_if_requested, format_microbatch_log, group_texts, should_log_interval, sum_lut_loss
 from examples.run_luterize_causal_lm_no_trainer import load_raw_datasets, parse_args
 
 
@@ -50,6 +50,23 @@ def test_progress_logging_defaults_are_chatty_enough_for_long_initial_eval():
 
     assert args.eval_logging_steps == 1
     assert args.microbatch_logging_steps == 1
+
+
+def test_format_microbatch_log_includes_losses_after_forward():
+    message = format_microbatch_log(
+        microbatch_step=3,
+        optimizer_step=2,
+        max_train_steps=10,
+        model_loss=1.25,
+        lut_loss=2.5,
+        total_loss=1.5,
+        elapsed=4.0,
+    )
+
+    assert message == (
+        "train microbatch 3: optimizer_step=2/10, "
+        "model_loss=1.250000, lut_loss=2.500000, total_loss=1.500000, elapsed=4.0s"
+    )
 
 
 class DummyCheckpointModel:

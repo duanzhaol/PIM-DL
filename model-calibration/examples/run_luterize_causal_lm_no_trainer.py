@@ -123,6 +123,14 @@ def should_log_interval(step, interval):
     return interval > 0 and (step == 1 or step % interval == 0)
 
 
+def format_microbatch_log(microbatch_step, optimizer_step, max_train_steps, model_loss, lut_loss, total_loss, elapsed):
+    return (
+        f"train microbatch {microbatch_step}: optimizer_step={optimizer_step}/{max_train_steps}, "
+        f"model_loss={model_loss:.6f}, lut_loss={lut_loss:.6f}, total_loss={total_loss:.6f}, "
+        f"elapsed={elapsed:.1f}s"
+    )
+
+
 class TokenizedCausalLMDataset:
     def __init__(self, dataset, max_seq_length):
         self.dataset = dataset
@@ -476,12 +484,6 @@ def main():
     while completed_steps < args.max_train_steps:
         for batch in train_dataloader:
             microbatch_steps += 1
-            if should_log_interval(microbatch_steps, args.microbatch_logging_steps):
-                elapsed = time.perf_counter() - train_start_time
-                accelerator.print(
-                    f"train microbatch {microbatch_steps}: "
-                    f"optimizer_step={completed_steps + 1}/{args.max_train_steps}, elapsed={elapsed:.1f}s"
-                )
             with accelerator.accumulate(model):
                 outputs = model(**batch)
                 model_loss = outputs.loss
@@ -491,6 +493,20 @@ def main():
                 optimizer.step()
                 lr_scheduler.step()
                 optimizer.zero_grad()
+
+            if should_log_interval(microbatch_steps, args.microbatch_logging_steps):
+                elapsed = time.perf_counter() - train_start_time
+                accelerator.print(
+                    format_microbatch_log(
+                        microbatch_step=microbatch_steps,
+                        optimizer_step=completed_steps + 1,
+                        max_train_steps=args.max_train_steps,
+                        model_loss=model_loss.detach().float().item(),
+                        lut_loss=lut_loss.detach().float().item(),
+                        total_loss=loss.detach().float().item(),
+                        elapsed=elapsed,
+                    )
+                )
 
             if accelerator.sync_gradients:
                 completed_steps += 1
