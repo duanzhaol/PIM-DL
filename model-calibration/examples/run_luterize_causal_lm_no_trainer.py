@@ -4,6 +4,12 @@ import json
 import logging
 import math
 import os
+import sys
+from pathlib import Path
+
+REPO_PACKAGE_ROOT = Path(__file__).resolve().parents[1]
+if str(REPO_PACKAGE_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_PACKAGE_ROOT))
 
 import torch
 from accelerate import Accelerator
@@ -30,6 +36,8 @@ def parse_args(input_args=None):
     parser.add_argument("--model_name_or_path", type=str, default="Qwen/Qwen3-4B")
     parser.add_argument("--dataset_name", type=str, default="wikitext")
     parser.add_argument("--dataset_config_name", type=str, default="wikitext-2-raw-v1")
+    parser.add_argument("--train_file", type=str, default=None)
+    parser.add_argument("--validation_file", type=str, default=None)
     parser.add_argument("--text_column", type=str, default="text")
     parser.add_argument("--max_seq_length", type=int, default=512)
     parser.add_argument("--preprocessing_num_workers", type=int, default=None)
@@ -102,8 +110,17 @@ def sum_lut_loss(model, device):
     return torch.stack([loss.to(device) for loss in losses]).sum()
 
 
+def load_raw_datasets(args):
+    if args.train_file is not None:
+        data_files = {"train": args.train_file}
+        data_files["validation"] = args.validation_file or args.train_file
+        return load_dataset("text", data_files=data_files)
+
+    return load_dataset(args.dataset_name, args.dataset_config_name)
+
+
 def build_lm_datasets(args, tokenizer, accelerator):
-    raw_datasets = load_dataset(args.dataset_name, args.dataset_config_name)
+    raw_datasets = load_raw_datasets(args)
     if "validation" not in raw_datasets:
         raw_datasets["validation"] = load_dataset(
             args.dataset_name,
@@ -153,6 +170,15 @@ def build_dataloaders(args, lm_datasets):
         batch_size=args.per_device_eval_batch_size,
     )
     return train_dataloader, eval_dataloader
+
+
+def enable_gradient_checkpointing_if_requested(model, args):
+    if not args.gradient_checkpointing:
+        return
+
+    model.gradient_checkpointing_enable()
+    if hasattr(model, "enable_input_require_grads"):
+        model.enable_input_require_grads()
 
 
 def apply_lut_replacement(model, args):
@@ -281,7 +307,7 @@ def main():
     )
     model.config.use_cache = False
     if args.gradient_checkpointing:
-        model.gradient_checkpointing_enable()
+        enable_gradient_checkpointing_if_requested(model, args)
 
     model = apply_lut_replacement(model, args)
     loaded_centroids = load_centroids_if_requested(model, args.centroid_path)
