@@ -12,3 +12,4 @@ def test_parse_args_defaults_to_mmlu_pro_sample():
     assert args.limit == 8
     assert args.batch_size == "1"
     assert args.bootstrap_iters == 0
+    assert args.output_dir is None

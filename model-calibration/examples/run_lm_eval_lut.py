@@ -29,6 +29,7 @@ def parse_args(input_args=None):
     parser.add_argument("--batch_size", type=str, default="1")
     parser.add_argument("--device", type=str, default="cuda")
     parser.add_argument("--output_path", type=str, default=None)
+    parser.set_defaults(output_dir=None)
     parser.add_argument("--bootstrap_iters", type=int, default=0)
     parser.add_argument("--log_samples", action=argparse.BooleanOptionalAction, default=True)
     parser.add_argument("--gen_kwargs", type=str, default=None)
