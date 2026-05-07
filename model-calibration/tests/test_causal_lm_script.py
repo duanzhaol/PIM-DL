@@ -171,6 +171,7 @@ def test_example_scripts_help_run_from_examples_path_without_pythonpath():
         "collect_qwen3_lut_centroids.py",
         "create_tiny_qwen3_checkpoint.py",
         "evaluate_mmlu_pro_lut.py",
+        "run_lm_eval_lut.py",
     ]:
         result = subprocess.run(
             [sys.executable, f"examples/{script_name}", "--help"],
