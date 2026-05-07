@@ -13,6 +13,7 @@ from lm_eval import evaluator
 from lm_eval.models.huggingface import HFLM
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
+from LUTNeuro.LUTLinear_t import LUTLinear_t
 from examples.run_luterize_causal_lm_no_trainer import (
     apply_lut_replacement,
     load_centroids_if_requested,
@@ -39,6 +40,7 @@ def parse_args(input_args=None):
     parser.add_argument("--nsharecodebook", type=int, default=1)
     parser.add_argument("--distance_p", type=str, default="2.0")
     parser.add_argument("--centroid_path", type=str, default=None)
+    parser.add_argument("--lut_eval_compute_dtype", choices=["float32", "model"], default="float32")
     parser.add_argument("--disable_lut", action="store_true")
     parser.add_argument("--torch_dtype", choices=["bfloat16", "float16", "float32"], default="bfloat16")
     return parser.parse_args(input_args)
@@ -73,6 +75,15 @@ def make_json_serializable(value):
         return str(value)
 
 
+def set_lut_eval_compute_dtype(model, eval_compute_dtype):
+    updated = 0
+    for module in model.modules():
+        if isinstance(module, LUTLinear_t):
+            module.eval_compute_dtype = eval_compute_dtype
+            updated += 1
+    return updated
+
+
 def load_lut_or_baseline_model(args):
     tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path, use_fast=True)
     if tokenizer.pad_token is None:
@@ -87,6 +98,7 @@ def load_lut_or_baseline_model(args):
 
     if not args.disable_lut:
         model = apply_lut_replacement(model, args)
+        set_lut_eval_compute_dtype(model, args.lut_eval_compute_dtype)
         loaded_centroids = load_centroids_if_requested(model, args.centroid_path)
         print(f"LUT modules loaded from centroid tensors: {loaded_centroids}", flush=True)
 

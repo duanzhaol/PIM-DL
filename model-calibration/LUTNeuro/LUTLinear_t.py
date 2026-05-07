@@ -19,6 +19,7 @@ class LUTLinear_t(nn.Module):
         fp16=False,
         debug=False,
         distance_p="inf",
+        eval_compute_dtype="float32",
         **factory_kwargs,
     ):
         super().__init__()
@@ -52,6 +53,7 @@ class LUTLinear_t(nn.Module):
 
         self.fp16 = fp16
         self.distance_p = str(distance_p).lower()
+        self.eval_compute_dtype = eval_compute_dtype
 
     def reset_parameters(self):
         nn.init.kaiming_uniform_(self.weight, a=5e-2)
@@ -63,6 +65,32 @@ class LUTLinear_t(nn.Module):
         return 'in_features={}, out_features={}, bias={}'.format(
             self.in_features, self.out_features, self.bias is not None
         )
+
+    def _uses_l2_distance(self):
+        try:
+            return float(self.distance_p) == 2.0
+        except ValueError:
+            return False
+
+    def _forward_compute_dtype(self):
+        if self.training or self.eval_compute_dtype == "float32":
+            return torch.float32
+        if self.eval_compute_dtype == "model":
+            return self.weight.dtype
+        raise ValueError("eval_compute_dtype must be 'float32' or 'model'")
+
+    def _nearest_centroid_indices(self, x_codebooks, centroids):
+        with torch.no_grad():
+            if self._uses_l2_distance():
+                x_norm = x_codebooks.square().sum(dim=-1, keepdim=True)
+                centroid_norm = centroids.square().sum(dim=-1).unsqueeze(1)
+                dot = torch.bmm(x_codebooks, centroids.transpose(1, 2))
+                return (x_norm - 2.0 * dot + centroid_norm).argmin(dim=-1)
+
+            cdist_x = x_codebooks if x_codebooks.dtype == torch.float32 else x_codebooks.to(torch.float32)
+            cdist_centroids = centroids if centroids.dtype == torch.float32 else centroids.to(torch.float32)
+            dist = torch.cdist(cdist_x, cdist_centroids, p=float(self.distance_p))
+            return dist.argmin(dim=-1)
 
     def forward(self, x):
         original_dim = x.dim()
@@ -78,14 +106,13 @@ class LUTLinear_t(nn.Module):
 
         print('all shape: ', x.shape, self.centroids.shape, self.weight.shape) if self.debug else None
 
-        x_tokens = x.reshape(batch * seq_len, self.in_features).to(torch.float32)
+        compute_dtype = self._forward_compute_dtype()
+        x_tokens = x.reshape(batch * seq_len, self.in_features).to(compute_dtype)
         x_codebooks = x_tokens.reshape(batch * seq_len, self.ncodebooks, self.vec_len).permute(1, 0, 2)
-        weight = self.weight.to(torch.float32)
-        centroids = self.centroids.weight.reshape(self.ncodebooks, self.ncentroids, self.vec_len).to(torch.float32)
-        soft_output = x_tokens.matmul(weight)
+        weight = self.weight.to(compute_dtype)
+        centroids = self.centroids.weight.reshape(self.ncodebooks, self.ncentroids, self.vec_len).to(compute_dtype)
 
-        dist = torch.cdist(x_codebooks, centroids, p=float(self.distance_p))
-        min_indices = dist.argmin(dim=-1)
+        min_indices = self._nearest_centroid_indices(x_codebooks, centroids)
 
         selected_centroids = torch.gather(
             centroids,
@@ -95,9 +122,11 @@ class LUTLinear_t(nn.Module):
         quant_input = selected_centroids.permute(1, 0, 2).reshape(batch * seq_len, self.in_features)
         quant_output = quant_input.matmul(weight)
 
-        self.lut_loss = (torch.mean((quant_output.detach() - soft_output) ** 2) + torch.mean((quant_output - soft_output.detach()) ** 2))
+        if self.training:
+            soft_output = x_tokens.matmul(weight)
+            self.lut_loss = (torch.mean((quant_output.detach() - soft_output) ** 2) + torch.mean((quant_output - soft_output.detach()) ** 2))
 
-        quant_output = soft_output + (quant_output - soft_output).detach()
+            quant_output = soft_output + (quant_output - soft_output).detach()
         output = quant_output.reshape(batch, seq_len, self.out_features) if original_dim == 3 else quant_output.reshape(batch, self.out_features)
         output = output.to(x.dtype)
 
