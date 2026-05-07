@@ -61,6 +61,14 @@ def test_baseline_eval_before_lut_flag_defaults_to_disabled():
     assert enabled_args.baseline_eval_before_lut
 
 
+def test_eval_only_flag_defaults_to_disabled():
+    args = parse_args([])
+    enabled_args = parse_args(["--eval_only"])
+
+    assert not args.eval_only
+    assert enabled_args.eval_only
+
+
 def test_format_microbatch_log_includes_losses_after_forward():
     message = format_microbatch_log(
         microbatch_step=3,

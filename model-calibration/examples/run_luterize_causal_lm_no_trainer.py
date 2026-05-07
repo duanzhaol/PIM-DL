@@ -73,6 +73,7 @@ def parse_args(input_args=None):
     parser.add_argument("--max_eval_batches", type=int, default=None)
     parser.add_argument("--seed", type=int, default=None)
     parser.add_argument("--baseline_eval_before_lut", action="store_true")
+    parser.add_argument("--eval_only", action="store_true")
     parser.add_argument("--centroid_path", type=str, default=None)
     parser.add_argument("--output_dir", type=str, default="serialization_dir/qwen3_lut")
     return parser.parse_args(input_args)
@@ -486,6 +487,14 @@ def main():
         f"LUT modules: {lut_module_count}, loaded centroid tensors: {loaded_centroids}, "
         f"trainable centroid values: {trainable_centroid_count}"
     )
+
+    if args.eval_only or args.max_train_steps <= 0:
+        accelerator.print("Preparing model and eval dataloader with Accelerate")
+        model, eval_dataloader = accelerator.prepare(model, eval_dataloader)
+        eval_loss, ppl = evaluate(model, eval_dataloader, accelerator, args, label="lut_eval")
+        accelerator.print(f"LUT eval loss: {eval_loss:.6f}, perplexity: {ppl:.6f}")
+        accelerator.print("Evaluation complete")
+        return
 
     optimizer = AdamW(trainable_params, lr=args.learning_rate, weight_decay=args.weight_decay)
     lr_scheduler = get_scheduler(
