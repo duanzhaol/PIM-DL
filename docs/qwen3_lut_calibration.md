@@ -2,6 +2,28 @@
 
 本文档记录当前 Qwen3 LUT 校准路径、主要脚本、复现实验命令和最新 sanity 结果。当前实现是 PyTorch-only 模拟，不依赖 PIM 硬件。
 
+## Python 环境
+
+当前 Qwen3/PIM-DL LUT 实验使用 Conda 环境，不使用 `uv`：
+
+```bash
+conda activate luturbo
+cd /root/PIM-DL-ASPLOS/model-calibration
+```
+
+确认过的环境信息：
+
+```text
+python: /root/miniconda3/envs/luturbo/bin/python
+Python: 3.12.12
+accelerate: 1.13.0
+lm_eval: 0.4.11
+torch: 2.9.1
+transformers: 4.57.1
+```
+
+注意当前 shell 可能默认在 `base` 环境中；复现实验前应显式 `conda activate luturbo`。
+
 ## 当前代码入口
 
 - `model-calibration/LUTNeuro/LUTLinear_t.py`
@@ -37,6 +59,16 @@ ncentroid: 32
 centroid_path: serialization_dir/qwen3_4b_lut_mlp_kmeans_n8_v2_c32.pt
 torch_dtype: bfloat16
 ```
+
+实验结果文件建议在文件名中显式带上关键配置，例如：
+
+```text
+qwen3_4b_lut_mlp_kmeans_n8_v2_c32.pt
+lm_eval_mmlu_pro_lut_v2_c32_fast_limit10.json
+qwen3_4b_lut_mlp_ppl_eval_v2_c32
+```
+
+不要混用 `vec_len=2` 和 `vec_len=32` 的结果；两者精度和容量差别很大，报告中必须分别标注。
 
 ## 收集 KMeans Centroid
 
@@ -154,6 +186,21 @@ python examples/run_lm_eval_lut.py \
 --gen_kwargs '{"max_gen_toks":128,"until":["Question:"],"do_sample":false}'
 ```
 
+## 验证命令
+
+代码改动后用以下命令做基础回归：
+
+```bash
+cd /root/PIM-DL-ASPLOS/model-calibration
+PYTHONPATH=. pytest tests -q
+```
+
+最近一次完整测试结果：
+
+```text
+34 passed
+```
+
 ## 当前判断
 
 当前 LUT 代码已经能完成 KMeans 初始化、FineWeb-Edu PPL 评测和 lm-eval MMLU-Pro 评测，但 MLP-only LUT 的质量还明显不够。FineWeb-Edu PPL 从 13.85 劣化到 105.73，能够解释 MMLU-Pro 从 0.5786 掉到 0.0429 的现象。
@@ -164,4 +211,3 @@ python examples/run_lm_eval_lut.py \
 - 检查 centroid selection 的梯度路径。
 - 在 MLP 质量改善前，暂缓扩大到 attention/MLP 混合替换。
 - 正式报告时同时记录 fp32 eval simulation 和 `--lut_eval_compute_dtype model` fast eval 的差异。
-
