@@ -1,6 +1,7 @@
 import torch
 
 from LUTNeuro.LUTLinear_t import LUTLinear_t
+from LUTNeuro.residual_compensation import input_residual_compensation_correction
 
 
 def test_lutlinear_forward_preserves_3d_shape_and_dtype():
@@ -93,6 +94,133 @@ def test_lutlinear_forward_matches_reference_lut_output():
     expected = selected_lut.sum(0).reshape(2, 3, 5)
 
     assert torch.allclose(actual, expected, atol=1e-5, rtol=1e-5)
+
+
+def test_lutlinear_input_residual_compensation_restores_dense_output_at_full_ratio():
+    torch.manual_seed(0)
+    layer = LUTLinear_t(
+        in_features=8,
+        out_features=5,
+        ncentroids=4,
+        vec_len=2,
+        bias=True,
+        dtype=torch.float32,
+        distance_p="2.0",
+        residual_compensation_ratio=1.0,
+    )
+    layer.eval()
+    x = torch.randn(2, 3, 8)
+
+    actual = layer(x)
+    expected = x.reshape(6, 8).matmul(layer.weight).reshape(2, 3, 5) + layer.bias
+
+    assert torch.allclose(actual, expected, atol=1e-5, rtol=1e-5)
+
+
+def test_lutlinear_input_residual_compensation_selects_largest_residual_channel():
+    layer = LUTLinear_t(
+        in_features=4,
+        out_features=2,
+        ncentroids=1,
+        vec_len=2,
+        bias=False,
+        dtype=torch.float32,
+        distance_p="2.0",
+        residual_compensation_ratio=0.25,
+    )
+    layer.eval()
+    layer.centroids.weight.data.zero_()
+    layer.weight.data.copy_(
+        torch.tensor(
+            [
+                [10.0, 0.0],
+                [0.0, 20.0],
+                [30.0, 0.0],
+                [0.0, 40.0],
+            ]
+        )
+    )
+    x = torch.tensor([[0.1, 3.0, -0.2, 1.0]])
+
+    actual = layer(x)
+
+    expected = torch.tensor([[0.0, 60.0]])
+    assert torch.allclose(actual, expected)
+
+
+def test_lutlinear_activation_topk_only_selects_largest_activation_channel():
+    layer = LUTLinear_t(
+        in_features=4,
+        out_features=2,
+        ncentroids=1,
+        vec_len=2,
+        bias=False,
+        dtype=torch.float32,
+        distance_p="2.0",
+        residual_compensation_ratio=0.25,
+        activation_topk_only=True,
+    )
+    layer.eval()
+    layer.centroids.weight.data.fill_(1.0)
+    layer.weight.data.copy_(
+        torch.tensor(
+            [
+                [10.0, 0.0],
+                [0.0, 20.0],
+                [30.0, 0.0],
+                [0.0, 40.0],
+            ]
+        )
+    )
+    x = torch.tensor([[0.1, 3.0, -0.2, 1.0]])
+
+    actual = layer(x)
+
+    expected = torch.tensor([[0.0, 60.0]])
+    assert torch.allclose(actual, expected)
+
+
+def test_lutlinear_activation_topk_only_full_ratio_matches_dense_output():
+    torch.manual_seed(0)
+    layer = LUTLinear_t(
+        in_features=8,
+        out_features=5,
+        ncentroids=4,
+        vec_len=2,
+        bias=True,
+        dtype=torch.float32,
+        distance_p="2.0",
+        residual_compensation_ratio=1.0,
+        activation_topk_only=True,
+    )
+    layer.eval()
+    x = torch.randn(2, 3, 8)
+
+    actual = layer(x)
+    expected = x.reshape(6, 8).matmul(layer.weight).reshape(2, 3, 5) + layer.bias
+
+    assert torch.allclose(actual, expected, atol=1e-5, rtol=1e-5)
+
+
+def test_input_residual_compensation_memory_safe_fallback_matches_sparse_path():
+    torch.manual_seed(0)
+    residual = torch.randn(4, 8)
+    weight = torch.randn(8, 6)
+
+    sparse_path = input_residual_compensation_correction(
+        residual,
+        weight,
+        ratio=0.5,
+        max_materialized_elements=10_000,
+    )
+    fallback_path = input_residual_compensation_correction(
+        residual,
+        weight,
+        ratio=0.5,
+        max_materialized_elements=1,
+    )
+
+    assert torch.allclose(fallback_path, sparse_path, atol=1e-6, rtol=1e-6)
 
 
 def test_lutlinear_l2_forward_does_not_call_cdist(monkeypatch):

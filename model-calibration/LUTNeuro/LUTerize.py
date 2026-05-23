@@ -34,7 +34,10 @@ class LUTerize:
                 init_centroids=True,
                 fp16=False,
                 distance_p="2.0",
-                target_modules="all_linear"):
+                target_modules="all_linear",
+                residual_compensation_ratio=0.0,
+                residual_compensation_metric="abs",
+                activation_topk_only=False):
    
         self.model = model
         self.dataloader = dataloader
@@ -60,6 +63,9 @@ class LUTerize:
         self.fp16 = fp16
         self.distance_p = distance_p
         self.target_modules = target_modules
+        self.residual_compensation_ratio = residual_compensation_ratio
+        self.residual_compensation_metric = residual_compensation_metric
+        self.activation_topk_only = activation_topk_only
 
     def _hook(self, layer_name, module, input, output):
         key = f"{layer_name}"
@@ -210,7 +216,10 @@ class LUTerize:
                                                     vec_len=self.vec_len, 
                                                     bias=child.bias is not None,
                                                     fp16=self.fp16,
-                                                    distance_p=self.distance_p,)
+                                                    distance_p=self.distance_p,
+                                                    residual_compensation_ratio=self.residual_compensation_ratio,
+                                                    residual_compensation_metric=self.residual_compensation_metric,
+                                                    activation_topk_only=self.activation_topk_only,)
                             lut_linear.weight.data.copy_(child.weight.data.transpose(0, 1).clone())
                         else:
                             lut_linear = LUTLinear( in_features=child.in_features, 

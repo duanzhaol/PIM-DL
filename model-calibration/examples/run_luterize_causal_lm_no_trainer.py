@@ -53,6 +53,9 @@ def parse_args(input_args=None):
     parser.add_argument("--ncentroid", type=int, default=16)
     parser.add_argument("--nsharecodebook", type=int, default=1)
     parser.add_argument("--distance_p", type=str, default="2.0")
+    parser.add_argument("--residual_compensation_ratio", type=float, default=0.0)
+    parser.add_argument("--residual_compensation_metric", choices=["abs", "weighted"], default="abs")
+    parser.add_argument("--activation_topk_only", action="store_true")
     parser.add_argument("--reconstruct_rate", type=float, default=1e-3)
     parser.add_argument("--centroid_requires_grad", action=argparse.BooleanOptionalAction, default=True)
     parser.add_argument("--weight_requires_grad", action=argparse.BooleanOptionalAction, default=False)
@@ -292,7 +295,7 @@ def apply_lut_replacement(model, args):
         logger=logger,
         activation_dir=None,
         centroid_dir=None,
-        output_dir=args.output_dir,
+        output_dir=getattr(args, "output_dir", None),
         ncentroid=args.ncentroid,
         nsharecodebook=args.nsharecodebook,
         vec_len=args.vec_len,
@@ -301,6 +304,9 @@ def apply_lut_replacement(model, args):
         fp16=False,
         distance_p=args.distance_p,
         target_modules=args.target_modules,
+        residual_compensation_ratio=getattr(args, "residual_compensation_ratio", 0.0),
+        residual_compensation_metric=getattr(args, "residual_compensation_metric", "abs"),
+        activation_topk_only=getattr(args, "activation_topk_only", False),
     )
     luterizer.luterize_model()
     return luterizer.model
@@ -485,7 +491,10 @@ def main():
 
     accelerator.print(
         f"LUT modules: {lut_module_count}, loaded centroid tensors: {loaded_centroids}, "
-        f"trainable centroid values: {trainable_centroid_count}"
+        f"trainable centroid values: {trainable_centroid_count}, "
+        f"residual_compensation_ratio={args.residual_compensation_ratio}, "
+        f"residual_compensation_metric={args.residual_compensation_metric}, "
+        f"activation_topk_only={args.activation_topk_only}"
     )
 
     if args.eval_only or args.max_train_steps <= 0:

@@ -39,3 +39,22 @@ def test_lut_cpu_kernel_matches_reference_lookup_sum():
     selected = torch.gather(lut, 1, indices.unsqueeze(-1).expand(-1, -1, 6))
     expected = selected.sum(dim=0)
     assert torch.allclose(actual, expected, atol=1e-5, rtol=1e-5)
+
+
+def test_lut_cpu_kernel_full_residual_compensation_matches_dense():
+    torch.manual_seed(0)
+    x = torch.randn(3, 8)
+    centroids = torch.zeros(4, 2, 2)
+    weight = torch.randn(8, 6)
+    lut = precompute_lut(centroids, weight)
+
+    actual = lut_cpu_kernel(
+        x,
+        centroids,
+        lut,
+        weight=weight,
+        residual_compensation_ratio=1.0,
+    )
+    expected = x.matmul(weight)
+
+    assert torch.allclose(actual, expected, atol=1e-5, rtol=1e-5)

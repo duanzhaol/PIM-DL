@@ -7,9 +7,19 @@ import os
 import sys
 import time
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Iterable
 
+REPO_PACKAGE_ROOT = Path(__file__).resolve().parents[1]
+if str(REPO_PACKAGE_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_PACKAGE_ROOT))
+
 import torch
+
+from LUTNeuro.residual_compensation import (
+    input_residual_compensation_correction,
+    residual_compensation_channels,
+)
 
 
 def parse_int_list(value: str) -> list[int]:
@@ -52,7 +62,14 @@ def precompute_lut(centroids: torch.Tensor, weight: torch.Tensor) -> torch.Tenso
     return torch.bmm(centroids, weight.reshape(ncodebooks, vec_len, out_features))
 
 
-def lut_cpu_kernel(x: torch.Tensor, centroids: torch.Tensor, lut: torch.Tensor) -> torch.Tensor:
+def lut_cpu_kernel(
+    x: torch.Tensor,
+    centroids: torch.Tensor,
+    lut: torch.Tensor,
+    weight: torch.Tensor | None = None,
+    residual_compensation_ratio: float = 0.0,
+    residual_compensation_metric: str = "abs",
+) -> torch.Tensor:
     batch_tokens, in_features = x.shape
     ncodebooks, ncentroids, vec_len = centroids.shape
     if in_features != ncodebooks * vec_len:
@@ -71,7 +88,24 @@ def lut_cpu_kernel(x: torch.Tensor, centroids: torch.Tensor, lut: torch.Tensor) 
         1,
         indices.unsqueeze(-1).expand(-1, -1, lut.shape[-1]),
     )
-    return selected.sum(dim=0)
+    output = selected.sum(dim=0)
+    if residual_compensation_ratio <= 0.0:
+        return output
+    if weight is None:
+        raise ValueError("weight is required when residual_compensation_ratio > 0")
+
+    selected_centroids = torch.gather(
+        centroids,
+        1,
+        indices.unsqueeze(-1).expand(-1, -1, vec_len),
+    )
+    quant_input = selected_centroids.permute(1, 0, 2).reshape(batch_tokens, in_features)
+    return output + input_residual_compensation_correction(
+        x - quant_input,
+        weight,
+        residual_compensation_ratio,
+        residual_compensation_metric,
+    )
 
 
 @dataclass(frozen=True)
@@ -135,6 +169,8 @@ def benchmark_module(
     repeats: int,
     table_init: str,
     max_table_gib: float,
+    residual_compensation_ratio: float,
+    residual_compensation_metric: str,
 ) -> dict:
     if spec.in_features % vec_len != 0:
         raise ValueError(f"{spec.name}: in_features is not divisible by vec_len={vec_len}")
@@ -156,7 +192,18 @@ def benchmark_module(
     lut = make_lut((ncodebooks, ncentroids, spec.out_features), dtype, table_init)
 
     dense_median_ms, dense_min_ms = time_ms(lambda: x.matmul(weight), warmup, repeats)
-    lut_median_ms, lut_min_ms = time_ms(lambda: lut_cpu_kernel(x, centroids, lut), warmup, repeats)
+    lut_median_ms, lut_min_ms = time_ms(
+        lambda: lut_cpu_kernel(
+            x,
+            centroids,
+            lut,
+            weight=weight,
+            residual_compensation_ratio=residual_compensation_ratio,
+            residual_compensation_metric=residual_compensation_metric,
+        ),
+        warmup,
+        repeats,
+    )
 
     del x, weight, centroids, lut
     gc.collect()
@@ -168,6 +215,8 @@ def benchmark_module(
         vec_len,
     )
     storage_ratio = compute_lut_storage_ratio(ncentroids, vec_len)
+    residual_channels = residual_compensation_channels(spec.in_features, residual_compensation_ratio)
+    compensation_compute_ratio = residual_channels / spec.in_features
     return {
         "module": spec.name,
         "module_count": spec.count,
@@ -185,6 +234,11 @@ def benchmark_module(
         "centroid_read_ratio": ncentroids / spec.out_features,
         "lookup_read_ratio": 1 / vec_len,
         "online_read_ratio": online_read_ratio,
+        "residual_compensation_ratio": residual_compensation_ratio,
+        "residual_compensation_metric": residual_compensation_metric,
+        "residual_compensation_channels": residual_channels,
+        "compensation_compute_ratio": compensation_compute_ratio,
+        "compensated_online_read_ratio": online_read_ratio + compensation_compute_ratio,
         "dense_weight_mib": tensor_mib(dense_entries, dtype),
         "lut_table_mib": lut_table_mib,
         "centroid_mib": tensor_mib(centroid_entries, dtype),
@@ -225,6 +279,11 @@ def add_weighted_average(rows: list[dict]) -> dict:
         "centroid_read_ratio": weighted_mean("centroid_read_ratio"),
         "lookup_read_ratio": weighted_mean("lookup_read_ratio"),
         "online_read_ratio": weighted_mean("online_read_ratio"),
+        "residual_compensation_ratio": first["residual_compensation_ratio"],
+        "residual_compensation_metric": first["residual_compensation_metric"],
+        "residual_compensation_channels": "",
+        "compensation_compute_ratio": weighted_mean("compensation_compute_ratio"),
+        "compensated_online_read_ratio": weighted_mean("compensated_online_read_ratio"),
         "dense_weight_mib": sum(row["module_count"] * row["dense_weight_mib"] for row in rows),
         "lut_table_mib": sum(row["module_count"] * row["lut_table_mib"] for row in rows),
         "centroid_mib": sum(row["module_count"] * row["centroid_mib"] for row in rows),
@@ -265,6 +324,8 @@ def parse_args(argv=None):
     parser.add_argument("--threads", type=int, default=0)
     parser.add_argument("--table_init", choices=["fill", "random"], default="fill")
     parser.add_argument("--max_table_gib", type=float, default=8.0)
+    parser.add_argument("--residual_compensation_ratio", type=float, default=0.0)
+    parser.add_argument("--residual_compensation_metric", choices=["abs", "weighted"], default="abs")
     parser.add_argument("--output_csv", type=str, default="serialization_dir/lut_cpu_kernel_qwen3_mlp.csv")
     parser.add_argument("--output_json", type=str, default="")
     return parser.parse_args(argv)
@@ -298,6 +359,8 @@ def main(argv=None):
                     repeats=args.repeats,
                     table_init=args.table_init,
                     max_table_gib=args.max_table_gib,
+                    residual_compensation_ratio=args.residual_compensation_ratio,
+                    residual_compensation_metric=args.residual_compensation_metric,
                 )
                 rows.append(row)
                 combo_rows.append(row)

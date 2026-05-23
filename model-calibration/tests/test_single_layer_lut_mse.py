@@ -3,6 +3,7 @@ import torch.nn as nn
 
 from examples.evaluate_single_layer_lut_mse import (
     compute_error_metrics,
+    dense_linear_output,
     load_layer_cache,
     lut_approximate_linear_output,
     resolve_module,
@@ -41,6 +42,25 @@ def test_lut_approximate_linear_output_matches_reference_lookup_sum():
     lut = torch.bmm(centroids, weight.reshape(2, 2, 3))
     expected = torch.stack([lut[0, 0] + lut[1, 0], lut[0, 1] + lut[1, 1]])
     assert torch.allclose(actual, expected)
+
+
+def test_lut_approximate_linear_output_full_residual_compensation_matches_dense():
+    torch.manual_seed(0)
+    activations = torch.randn(5, 8)
+    weight = torch.randn(8, 3)
+    bias = torch.randn(3)
+    centroids = torch.zeros(4, 2, 2)
+
+    actual = lut_approximate_linear_output(
+        activations,
+        weight,
+        centroids,
+        bias=bias,
+        residual_compensation_ratio=1.0,
+    )
+    expected = dense_linear_output(activations, weight, bias)
+
+    assert torch.allclose(actual, expected, atol=1e-5, rtol=1e-5)
 
 
 def test_compute_error_metrics_reports_relative_mse_and_cosine():

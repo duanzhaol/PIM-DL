@@ -180,6 +180,7 @@ def test_example_scripts_help_run_from_examples_path_without_pythonpath():
         "create_tiny_qwen3_checkpoint.py",
         "evaluate_mmlu_pro_lut.py",
         "run_lm_eval_lut.py",
+        "run_decode_dppl_lut.py",
         "benchmark_lut_cpu_kernel.py",
         "evaluate_single_layer_lut_mse.py",
         "collect_single_layer_lut_cache.py",

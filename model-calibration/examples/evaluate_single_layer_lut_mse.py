@@ -26,6 +26,10 @@ from examples.run_luterize_causal_lm_no_trainer import (
     resolve_torch_dtype,
     sample_dataset,
 )
+from LUTNeuro.residual_compensation import (
+    input_residual_compensation_correction,
+    residual_compensation_channels,
+)
 
 
 def parse_args(argv=None):
@@ -47,6 +51,8 @@ def parse_args(argv=None):
     parser.add_argument("--torch_dtype", choices=["bfloat16", "float16", "float32"], default="bfloat16")
     parser.add_argument("--eval_chunk_tokens", type=int, default=64)
     parser.add_argument("--codebook_block_size", type=int, default=16)
+    parser.add_argument("--residual_compensation_ratio", type=float, default=0.0)
+    parser.add_argument("--residual_compensation_metric", choices=["abs", "weighted"], default="abs")
     parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--output_json", type=str, required=True)
     parser.add_argument("--overwrite", action="store_true")
@@ -174,6 +180,8 @@ def lut_approximate_linear_output(
     bias=None,
     eval_chunk_tokens=64,
     codebook_block_size=16,
+    residual_compensation_ratio=0.0,
+    residual_compensation_metric="abs",
 ):
     tokens, in_features = activations.shape
     ncodebooks, ncentroid, vec_len = centroids.shape
@@ -185,6 +193,7 @@ def lut_approximate_linear_output(
     out_features = weight.shape[1]
     weight_blocks = weight.reshape(ncodebooks, vec_len, out_features)
     lut = torch.bmm(centroids, weight_blocks)
+    residual_k = residual_compensation_channels(in_features, residual_compensation_ratio)
     outputs = []
 
     for token_start in range(0, tokens, eval_chunk_tokens):
@@ -192,6 +201,7 @@ def lut_approximate_linear_output(
         x_chunk = activations[token_start:token_end]
         out_chunk = torch.zeros(token_end - token_start, out_features, dtype=torch.float32)
         x_codebooks = x_chunk.reshape(token_end - token_start, ncodebooks, vec_len).permute(1, 0, 2)
+        quant_chunk = torch.zeros_like(x_chunk) if residual_k > 0 else None
 
         for codebook_start in range(0, ncodebooks, codebook_block_size):
             codebook_end = min(codebook_start + codebook_block_size, ncodebooks)
@@ -208,6 +218,26 @@ def lut_approximate_linear_output(
                 indices.unsqueeze(-1).expand(-1, -1, out_features),
             )
             out_chunk += selected.sum(dim=0)
+            if quant_chunk is not None:
+                selected_centroids = torch.gather(
+                    centroid_block,
+                    1,
+                    indices.unsqueeze(-1).expand(-1, -1, vec_len),
+                )
+                feature_start = codebook_start * vec_len
+                feature_end = codebook_end * vec_len
+                quant_chunk[:, feature_start:feature_end] = selected_centroids.permute(1, 0, 2).reshape(
+                    token_end - token_start,
+                    feature_end - feature_start,
+                )
+
+        if quant_chunk is not None:
+            out_chunk += input_residual_compensation_correction(
+                x_chunk - quant_chunk,
+                weight,
+                residual_compensation_ratio,
+                residual_compensation_metric,
+            )
 
         if bias is not None:
             out_chunk += bias
@@ -345,6 +375,8 @@ def evaluate_layer_cache(cache: dict, args, start_time: float) -> dict:
         bias=bias,
         eval_chunk_tokens=args.eval_chunk_tokens,
         codebook_block_size=args.codebook_block_size,
+        residual_compensation_ratio=args.residual_compensation_ratio,
+        residual_compensation_metric=args.residual_compensation_metric,
     )
     metrics = compute_error_metrics(approx, dense)
 
@@ -360,6 +392,12 @@ def evaluate_layer_cache(cache: dict, args, start_time: float) -> dict:
         "kmeans_iter": args.kmeans_iter,
         "lut_storage_ratio": compute_lut_storage_ratio(args.ncentroid, args.vec_len),
         "online_read_ratio": compute_online_read_ratio(weight.shape[0], weight.shape[1], args.ncentroid, args.vec_len),
+        "residual_compensation_ratio": args.residual_compensation_ratio,
+        "residual_compensation_metric": args.residual_compensation_metric,
+        "residual_compensation_channels": residual_compensation_channels(
+            weight.shape[0],
+            args.residual_compensation_ratio,
+        ),
         "kmeans_seconds": kmeans_seconds,
         "total_seconds": time.perf_counter() - start_time,
         **metrics,
