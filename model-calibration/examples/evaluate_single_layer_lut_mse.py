@@ -46,10 +46,13 @@ def parse_args(argv=None):
     parser.add_argument("--eval_tokens", type=int, default=512)
     parser.add_argument("--vec_len", type=int, required=True)
     parser.add_argument("--ncentroid", type=int, required=True)
+    parser.add_argument("--kmeans_backend", choices=["sklearn", "faiss-gpu", "torch-gpu"], default="sklearn")
     parser.add_argument("--kmeans_iter", type=int, default=20)
     parser.add_argument("--kmeans_batch_size", type=int, default=0)
+    parser.add_argument("--kmeans_codebook_block_size", type=int, default=4)
     parser.add_argument("--torch_dtype", choices=["bfloat16", "float16", "float32"], default="bfloat16")
     parser.add_argument("--eval_chunk_tokens", type=int, default=64)
+    parser.add_argument("--eval_device", choices=["cpu", "cuda", "auto"], default="cpu")
     parser.add_argument("--codebook_block_size", type=int, default=16)
     parser.add_argument("--residual_compensation_ratio", type=float, default=0.0)
     parser.add_argument("--residual_compensation_metric", choices=["abs", "weighted"], default="abs")
@@ -148,7 +151,64 @@ def collect_module_activations(model, module, dataloader, device, calib_tokens, 
     return torch.cat(storage["calib"], dim=0), torch.cat(storage["eval"], dim=0)
 
 
-def fit_centroids_from_activations(activations, vec_len, ncentroid, kmeans_iter, kmeans_batch_size, seed):
+def fit_centroids_torch_gpu(subvectors, ncentroid, kmeans_iter, codebook_block_size, seed):
+    if not torch.cuda.is_available():
+        raise RuntimeError("kmeans_backend=torch-gpu requested, but torch.cuda.is_available() is false")
+
+    ncodebooks, tokens, vec_len = subvectors.shape
+    centroids = torch.empty(ncodebooks, ncentroid, vec_len, dtype=torch.float32)
+    generator = torch.Generator(device="cpu")
+    generator.manual_seed(seed)
+    device = torch.device("cuda")
+    codebook_block_size = max(1, codebook_block_size)
+
+    for codebook_start in range(0, ncodebooks, codebook_block_size):
+        codebook_end = min(codebook_start + codebook_block_size, ncodebooks)
+        x_block = subvectors[codebook_start:codebook_end].to(device)
+        block_size = codebook_end - codebook_start
+        init_indices = torch.stack(
+            [torch.randperm(tokens, generator=generator)[:ncentroid] for _ in range(block_size)]
+        ).to(device)
+        centroids_block = x_block[
+            torch.arange(block_size, device=device).unsqueeze(1),
+            init_indices,
+        ].contiguous()
+
+        for _ in range(kmeans_iter):
+            centroid_norm = centroids_block.square().sum(dim=-1).unsqueeze(1)
+            scores = torch.bmm(x_block, centroids_block.transpose(1, 2))
+            scores.mul_(-2.0).add_(centroid_norm)
+            indices = scores.argmin(dim=-1)
+            del scores
+
+            next_centroids = torch.empty_like(centroids_block)
+            for block_idx in range(block_size):
+                sums = torch.zeros(ncentroid, vec_len, dtype=torch.float32, device=device)
+                sums.index_add_(0, indices[block_idx], x_block[block_idx])
+                counts = torch.bincount(indices[block_idx], minlength=ncentroid)
+                nonempty = counts > 0
+                updated = centroids_block[block_idx].clone()
+                updated[nonempty] = sums[nonempty] / counts[nonempty].unsqueeze(1)
+                next_centroids[block_idx] = updated
+            centroids_block = next_centroids
+
+        centroids[codebook_start:codebook_end] = centroids_block.cpu()
+        del x_block, centroids_block
+        torch.cuda.empty_cache()
+
+    return centroids
+
+
+def fit_centroids_from_activations(
+    activations,
+    vec_len,
+    ncentroid,
+    kmeans_backend,
+    kmeans_iter,
+    kmeans_batch_size,
+    kmeans_codebook_block_size,
+    seed,
+):
     tokens, in_features = activations.shape
     if in_features % vec_len != 0:
         raise ValueError(f"in_features={in_features} must be divisible by vec_len={vec_len}")
@@ -159,6 +219,35 @@ def fit_centroids_from_activations(activations, vec_len, ncentroid, kmeans_iter,
     subvectors = activations.reshape(tokens, ncodebooks, vec_len).permute(1, 0, 2).contiguous()
     centroids = torch.empty(ncodebooks, ncentroid, vec_len, dtype=torch.float32)
     batch_size = kmeans_batch_size if kmeans_batch_size > 0 else max(ncentroid * 4, 1024)
+
+    if kmeans_backend == "faiss-gpu":
+        import faiss
+
+        if faiss.get_num_gpus() <= 0:
+            raise RuntimeError("kmeans_backend=faiss-gpu requested, but FAISS reports no available GPU")
+        for codebook_idx in range(ncodebooks):
+            kmeans = faiss.Kmeans(
+                vec_len,
+                ncentroid,
+                niter=kmeans_iter,
+                nredo=1,
+                verbose=False,
+                gpu=True,
+                seed=seed,
+                min_points_per_centroid=1,
+            )
+            kmeans.train(subvectors[codebook_idx].numpy())
+            centroids[codebook_idx] = torch.from_numpy(kmeans.centroids)
+        return centroids
+
+    if kmeans_backend == "torch-gpu":
+        return fit_centroids_torch_gpu(
+            subvectors,
+            ncentroid,
+            kmeans_iter,
+            kmeans_codebook_block_size,
+            seed,
+        )
 
     for codebook_idx in range(ncodebooks):
         kmeans = MiniBatchKMeans(
@@ -192,57 +281,60 @@ def lut_approximate_linear_output(
 
     out_features = weight.shape[1]
     weight_blocks = weight.reshape(ncodebooks, vec_len, out_features)
-    lut = torch.bmm(centroids, weight_blocks)
     residual_k = residual_compensation_channels(in_features, residual_compensation_ratio)
-    outputs = []
+    output = torch.zeros(tokens, out_features, dtype=torch.float32, device=activations.device)
+    quant_activations = torch.zeros_like(activations) if residual_k > 0 else None
 
-    for token_start in range(0, tokens, eval_chunk_tokens):
-        token_end = min(token_start + eval_chunk_tokens, tokens)
-        x_chunk = activations[token_start:token_end]
-        out_chunk = torch.zeros(token_end - token_start, out_features, dtype=torch.float32)
-        x_codebooks = x_chunk.reshape(token_end - token_start, ncodebooks, vec_len).permute(1, 0, 2)
-        quant_chunk = torch.zeros_like(x_chunk) if residual_k > 0 else None
+    for codebook_start in range(0, ncodebooks, codebook_block_size):
+        codebook_end = min(codebook_start + codebook_block_size, ncodebooks)
+        centroid_block = centroids[codebook_start:codebook_end]
+        lut_block = torch.bmm(centroid_block, weight_blocks[codebook_start:codebook_end])
+        feature_start = codebook_start * vec_len
+        feature_end = codebook_end * vec_len
 
-        for codebook_start in range(0, ncodebooks, codebook_block_size):
-            codebook_end = min(codebook_start + codebook_block_size, ncodebooks)
-            x_block = x_codebooks[codebook_start:codebook_end]
-            centroid_block = centroids[codebook_start:codebook_end]
+        for token_start in range(0, tokens, eval_chunk_tokens):
+            token_end = min(token_start + eval_chunk_tokens, tokens)
+            x_block = activations[token_start:token_end, feature_start:feature_end].reshape(
+                token_end - token_start,
+                codebook_end - codebook_start,
+                vec_len,
+            ).permute(1, 0, 2)
             x_norm = x_block.square().sum(dim=-1, keepdim=True)
             centroid_norm = centroid_block.square().sum(dim=-1).unsqueeze(1)
             dot = torch.bmm(x_block, centroid_block.transpose(1, 2))
             indices = (x_norm - 2.0 * dot + centroid_norm).argmin(dim=-1)
-            lut_block = lut[codebook_start:codebook_end]
             selected = torch.gather(
                 lut_block,
                 1,
                 indices.unsqueeze(-1).expand(-1, -1, out_features),
             )
-            out_chunk += selected.sum(dim=0)
-            if quant_chunk is not None:
+            output[token_start:token_end] += selected.sum(dim=0)
+            if quant_activations is not None:
                 selected_centroids = torch.gather(
                     centroid_block,
                     1,
                     indices.unsqueeze(-1).expand(-1, -1, vec_len),
                 )
-                feature_start = codebook_start * vec_len
-                feature_end = codebook_end * vec_len
-                quant_chunk[:, feature_start:feature_end] = selected_centroids.permute(1, 0, 2).reshape(
+                quant_activations[token_start:token_end, feature_start:feature_end] = selected_centroids.permute(
+                    1, 0, 2
+                ).reshape(
                     token_end - token_start,
                     feature_end - feature_start,
                 )
 
-        if quant_chunk is not None:
-            out_chunk += input_residual_compensation_correction(
-                x_chunk - quant_chunk,
+    if quant_activations is not None:
+        for token_start in range(0, tokens, eval_chunk_tokens):
+            token_end = min(token_start + eval_chunk_tokens, tokens)
+            output[token_start:token_end] += input_residual_compensation_correction(
+                activations[token_start:token_end] - quant_activations[token_start:token_end],
                 weight,
                 residual_compensation_ratio,
                 residual_compensation_metric,
             )
 
-        if bias is not None:
-            out_chunk += bias
-        outputs.append(out_chunk)
-    return torch.cat(outputs, dim=0)
+    if bias is not None:
+        output += bias
+    return output
 
 
 def compute_error_metrics(approx, dense):
@@ -353,6 +445,11 @@ def evaluate_layer_cache(cache: dict, args, start_time: float) -> dict:
     eval_activations = cache["eval_activations"].float()
     weight = cache["weight"].float()
     bias = cache["bias"].float() if cache["bias"] is not None else None
+    eval_device = args.eval_device
+    if eval_device == "auto":
+        eval_device = "cuda" if torch.cuda.is_available() else "cpu"
+    if eval_device == "cuda" and not torch.cuda.is_available():
+        raise RuntimeError("eval_device=cuda requested, but torch.cuda.is_available() is false")
 
     print(f"Fitting KMeans: K={args.ncentroid}, V={args.vec_len}", flush=True)
     kmeans_start = time.perf_counter()
@@ -360,13 +457,21 @@ def evaluate_layer_cache(cache: dict, args, start_time: float) -> dict:
         calib_activations,
         args.vec_len,
         args.ncentroid,
+        args.kmeans_backend,
         args.kmeans_iter,
         args.kmeans_batch_size,
+        args.kmeans_codebook_block_size,
         args.seed,
     )
     kmeans_seconds = time.perf_counter() - kmeans_start
 
     print("Computing dense and LUT outputs", flush=True)
+    if eval_device == "cuda":
+        eval_activations = eval_activations.cuda()
+        weight = weight.cuda()
+        centroids = centroids.cuda()
+        if bias is not None:
+            bias = bias.cuda()
     dense = dense_linear_output(eval_activations, weight, bias)
     approx = lut_approximate_linear_output(
         eval_activations,
@@ -389,7 +494,10 @@ def evaluate_layer_cache(cache: dict, args, start_time: float) -> dict:
         "ncodebooks": int(weight.shape[0] // args.vec_len),
         "calib_tokens": int(calib_activations.shape[0]),
         "eval_tokens": int(eval_activations.shape[0]),
+        "eval_device": eval_device,
+        "kmeans_backend": args.kmeans_backend,
         "kmeans_iter": args.kmeans_iter,
+        "kmeans_codebook_block_size": args.kmeans_codebook_block_size,
         "lut_storage_ratio": compute_lut_storage_ratio(args.ncentroid, args.vec_len),
         "online_read_ratio": compute_online_read_ratio(weight.shape[0], weight.shape[1], args.ncentroid, args.vec_len),
         "residual_compensation_ratio": args.residual_compensation_ratio,

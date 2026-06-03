@@ -1,0 +1,7 @@
+export_file,panel,role,source
+tile_strict_cooccurrence_coverage_full2560.csv,A,final strict per-tile co-occurrence coverage on full 2560-channel layer,model-calibration/serialization_dir/single_layer_lut_mse_up_proj_100k/model_layers_18_mlp_up_proj_calib100000_eval10000_cache.pt
+tile_strict_cooccurrence_coverage_slice2048.csv,A,optional strict per-tile co-occurrence coverage on 2048-channel slice including V=1024,model-calibration/serialization_dir/single_layer_lut_mse_up_proj_100k/model_layers_18_mlp_up_proj_calib100000_eval10000_cache.pt
+outlier_error_summary_by_kv.csv,B,summary of projected lookup error by K/V,"model-calibration/serialization_dir/partition_lookup_failure_qwen35_layer18_up_proj_{k,v}/summary.json"
+outlier_error_cdf_by_channel.csv,B,per-channel projected lookup error CDF data,"model-calibration/serialization_dir/partition_lookup_failure_qwen35_layer18_up_proj_{k,v}/channel_curves.csv"
+outlier_error_pareto_by_channel.csv,B,per-channel projected lookup error Pareto data,"model-calibration/serialization_dir/partition_lookup_failure_qwen35_layer18_up_proj_{k,v}/channel_curves.csv"
+outlier_error_by_activation_outlier_rank.csv,B,per-channel projected lookup error sorted by activation outlier score,"model-calibration/serialization_dir/partition_lookup_failure_qwen35_layer18_up_proj_{k,v}/channel_curves.csv"
