@@ -8,7 +8,7 @@ from datasets import Dataset
 from transformers import Qwen3Config, Qwen3ForCausalLM
 
 from LUTNeuro.LUTLinear_t import LUTLinear_t
-from examples.run_luterize_causal_lm_no_trainer import apply_lut_replacement, build_tokenized_lm_datasets, configure_trainable_parameters, enable_gradient_checkpointing_if_requested, format_microbatch_log, group_texts, load_centroids_if_requested, should_log_interval, sum_lut_loss
+from examples.run_luterize_causal_lm_no_trainer import apply_lut_replacement, build_tokenized_lm_datasets, configure_trainable_parameters, count_trainable_parameters, enable_gradient_checkpointing_if_requested, format_microbatch_log, group_texts, load_centroids_if_requested, load_lut_model_state_if_requested, should_log_interval, sum_lut_loss
 from examples.run_luterize_causal_lm_no_trainer import load_raw_datasets, parse_args
 
 
@@ -168,6 +168,179 @@ def test_load_centroids_reads_torch_saved_pt_files(tmp_path):
 
     assert loaded == 1
     assert torch.equal(model[0].centroids.weight, expected_centroids)
+
+
+def test_count_trainable_parameters_separates_centroids_and_weights():
+    model = nn.Sequential(
+        LUTLinear_t(8, 4, bias=False, ncentroids=2, vec_len=4, distance_p="2.0"),
+        nn.Linear(4, 2, bias=False),
+    )
+    args = parse_args(["--weight_requires_grad", "--centroid_requires_grad"])
+
+    configure_trainable_parameters(model, args)
+    counts = count_trainable_parameters(model)
+
+    assert counts["centroid"] == model[0].centroids.weight.numel()
+    assert counts["non_centroid"] == model[0].weight.numel() + model[1].weight.numel()
+    assert counts["total"] == counts["centroid"] + counts["non_centroid"]
+
+
+def test_weight_training_freezes_embeddings_and_lm_head_by_default():
+    config = Qwen3Config(
+        vocab_size=128,
+        hidden_size=32,
+        intermediate_size=64,
+        num_hidden_layers=1,
+        num_attention_heads=4,
+        num_key_value_heads=2,
+        head_dim=8,
+        max_position_embeddings=64,
+        tie_word_embeddings=False,
+    )
+    args = parse_args(
+        [
+            "--target_modules",
+            "mlp",
+            "--vec_len",
+            "4",
+            "--ncentroid",
+            "4",
+            "--weight_requires_grad",
+            "--centroid_requires_grad",
+        ]
+    )
+    model = apply_lut_replacement(Qwen3ForCausalLM(config), args)
+
+    configure_trainable_parameters(model, args)
+
+    assert not model.model.embed_tokens.weight.requires_grad
+    assert not model.lm_head.weight.requires_grad
+    assert any(
+        module.weight.requires_grad and module.centroids.weight.requires_grad
+        for module in model.modules()
+        if isinstance(module, LUTLinear_t)
+    )
+
+
+def test_lut_module_weight_scope_trains_only_replaced_linear_weights():
+    config = Qwen3Config(
+        vocab_size=128,
+        hidden_size=32,
+        intermediate_size=64,
+        num_hidden_layers=1,
+        num_attention_heads=4,
+        num_key_value_heads=2,
+        head_dim=8,
+        max_position_embeddings=64,
+        tie_word_embeddings=False,
+    )
+    args = parse_args(
+        [
+            "--target_modules",
+            "mlp",
+            "--vec_len",
+            "4",
+            "--ncentroid",
+            "4",
+            "--weight_requires_grad",
+            "--centroid_requires_grad",
+            "--weight_trainable_scope",
+            "lut_modules",
+        ]
+    )
+    model = apply_lut_replacement(Qwen3ForCausalLM(config), args)
+
+    configure_trainable_parameters(model, args)
+
+    assert not model.model.embed_tokens.weight.requires_grad
+    assert not model.lm_head.weight.requires_grad
+    assert not model.model.layers[0].self_attn.q_proj.weight.requires_grad
+    assert model.model.layers[0].mlp.gate_proj.weight.requires_grad
+    assert model.model.layers[0].mlp.up_proj.weight.requires_grad
+    assert model.model.layers[0].mlp.down_proj.weight.requires_grad
+    assert model.model.layers[0].mlp.gate_proj.centroids.weight.requires_grad
+
+
+def test_load_lut_model_state_restores_full_luterized_checkpoint(tmp_path):
+    config = Qwen3Config(
+        vocab_size=128,
+        hidden_size=32,
+        intermediate_size=64,
+        num_hidden_layers=1,
+        num_attention_heads=4,
+        num_key_value_heads=2,
+        head_dim=8,
+        max_position_embeddings=64,
+        tie_word_embeddings=True,
+    )
+    args = parse_args(
+        [
+            "--target_modules",
+            "mlp",
+            "--vec_len",
+            "4",
+            "--ncentroid",
+            "4",
+            "--torch_dtype",
+            "float32",
+        ]
+    )
+    source_model = apply_lut_replacement(Qwen3ForCausalLM(config), args)
+    target_model = apply_lut_replacement(Qwen3ForCausalLM(config), args)
+    source_lut = next(module for module in source_model.modules() if isinstance(module, LUTLinear_t))
+    source_lut.weight.data.fill_(0.25)
+    source_lut.centroids.weight.data.fill_(1.5)
+    source_model.save_pretrained(tmp_path)
+
+    loaded_keys = load_lut_model_state_if_requested(target_model, str(tmp_path))
+    target_lut = next(module for module in target_model.modules() if isinstance(module, LUTLinear_t))
+
+    assert loaded_keys > 0
+    assert torch.equal(target_lut.weight, source_lut.weight)
+    assert torch.equal(target_lut.centroids.weight, source_lut.centroids.weight)
+
+
+def test_load_lut_model_state_normalizes_old_language_model_prefix(tmp_path):
+    config = Qwen3Config(
+        vocab_size=128,
+        hidden_size=32,
+        intermediate_size=64,
+        num_hidden_layers=1,
+        num_attention_heads=4,
+        num_key_value_heads=2,
+        head_dim=8,
+        max_position_embeddings=64,
+        tie_word_embeddings=True,
+    )
+    args = parse_args(
+        [
+            "--target_modules",
+            "mlp",
+            "--vec_len",
+            "4",
+            "--ncentroid",
+            "4",
+            "--torch_dtype",
+            "float32",
+        ]
+    )
+    source_model = apply_lut_replacement(Qwen3ForCausalLM(config), args)
+    target_model = apply_lut_replacement(Qwen3ForCausalLM(config), args)
+    source_lut = next(module for module in source_model.modules() if isinstance(module, LUTLinear_t))
+    source_lut.weight.data.fill_(0.5)
+    source_lut.centroids.weight.data.fill_(2.0)
+    old_prefixed_state = {
+        key.replace("model.", "model.language_model.", 1): value.clone()
+        for key, value in source_model.state_dict().items()
+    }
+    torch.save(old_prefixed_state, tmp_path / "pytorch_model.bin")
+
+    loaded_keys = load_lut_model_state_if_requested(target_model, str(tmp_path))
+    target_lut = next(module for module in target_model.modules() if isinstance(module, LUTLinear_t))
+
+    assert loaded_keys > 0
+    assert torch.equal(target_lut.weight, source_lut.weight)
+    assert torch.equal(target_lut.centroids.weight, source_lut.centroids.weight)
 
 
 def test_example_scripts_help_run_from_examples_path_without_pythonpath():

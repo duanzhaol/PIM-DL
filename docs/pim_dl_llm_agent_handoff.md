@@ -39,9 +39,12 @@ model-calibration/examples/run_luterize_causal_lm_no_trainer.py
 - 支持 `--baseline_eval_before_lut`，在 LUT 替换前先评测原模型 PPL。
 - 支持 `--eval_only` 或 `--max_train_steps 0`，只跑 LUT eval，不训练。
 - 支持 `--centroid_path` 加载预先 KMeans 得到的 centroid。
+- 支持 `--resume_from_lut_model` 加载完整 LUT 化 checkpoint。注意它必须先按相同 `target_modules/vec_len/ncentroid` 替换成 `LUTLinear_t`，再加载完整 state dict；不能直接用 `AutoModelForCausalLM.from_pretrained()` 加载这个 checkpoint。
+- 支持 `--save_full_lut_model`。开启后训练结束会保存完整 LUT 化模型 checkpoint，同时仍保存 `model_lut_state.pt` 方便只加载 centroid/state 的旧流程。
+- 支持 `--weight_requires_grad` 和 `--centroid_requires_grad`。默认仍是只训练 centroid；若要对齐原始 PIM-DL 的权重微调阶段，需要显式传 `--weight_requires_grad`，通常同时保留 `--centroid_requires_grad`。
 - 支持 `--eval_logging_steps` 和 `--microbatch_logging_steps`，便于长任务中观察每个 eval batch 和 microbatch loss。
 - 支持 gradient checkpointing，且使用 `use_reentrant=False` 并调用 `enable_input_require_grads()`，避免冻结权重时 centroid 收不到梯度。
-- 保存 LUT 状态到 `output_dir/model_lut_state.pt`，并保存 tokenizer 与 `lut_training_args.json`。
+- 默认保存 LUT 状态到 `output_dir/model_lut_state.pt`，并保存 tokenizer 与 `lut_training_args.json`。完整权重微调实验必须加 `--save_full_lut_model`，否则微调后的 weight 不会被保存。
 
 训练目标目前是：
 
@@ -699,7 +702,16 @@ baseline 和 LUT 必须使用同样的 `limit`、`num_fewshot`、`gen_kwargs` �
    - 只训练 centroid。
    - 训练 weight + centroid。
    - STE/hard assignment/soft assignment 的差异。
-6. 正式画图时建议横轴使用 `lut_storage_ratio=K/V` 或 `online_read_ratio=K/O+1/V`，纵轴同时画：
+6. Qwen3.5 Pareto 点的权重微调阶段脚本：
+
+```bash
+cd model-calibration
+PHASES=train,ppl bash scripts/run_qwen35_pareto_weight_finetune.sh
+```
+
+该脚本要求对应的 KMeans centroid 文件已经存在；它会使用 `--weight_requires_grad --centroid_requires_grad --save_full_lut_model` 做完整 LUT checkpoint 保存，PPL 阶段再用 `--resume_from_lut_model` 恢复。可用 `CENTROID_REQUIRES_GRAD=0` 做 weight-only 重试。当前 A100 80GB 上 `K=128,V=4` 可跑通 20-step smoke，`K=512,V=4` 的 initial eval 可跑，但训练 backward 会在 centroid-search 临时距离张量处 OOM。
+
+7. 正式画图时建议横轴使用 `lut_storage_ratio=K/V` 或 `online_read_ratio=K/O+1/V`，纵轴同时画：
    - 单层 `relative_mse`。
    - CPU benchmark `lut_median_ms`。
    - dense baseline 水平线。

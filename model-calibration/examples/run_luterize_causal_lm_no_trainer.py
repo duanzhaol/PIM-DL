@@ -59,6 +59,9 @@ def parse_args(input_args=None):
     parser.add_argument("--reconstruct_rate", type=float, default=1e-3)
     parser.add_argument("--centroid_requires_grad", action=argparse.BooleanOptionalAction, default=True)
     parser.add_argument("--weight_requires_grad", action=argparse.BooleanOptionalAction, default=False)
+    parser.add_argument("--weight_trainable_scope", choices=["all", "lut_modules"], default="all")
+    parser.add_argument("--freeze_embeddings", action=argparse.BooleanOptionalAction, default=True)
+    parser.add_argument("--freeze_lm_head", action=argparse.BooleanOptionalAction, default=True)
     parser.add_argument("--gradient_checkpointing", action=argparse.BooleanOptionalAction, default=True)
     parser.add_argument("--torch_dtype", choices=["bfloat16", "float16", "float32"], default="bfloat16")
     parser.add_argument("--per_device_train_batch_size", type=int, default=1)
@@ -66,6 +69,7 @@ def parse_args(input_args=None):
     parser.add_argument("--gradient_accumulation_steps", type=int, default=1)
     parser.add_argument("--learning_rate", type=float, default=1e-3)
     parser.add_argument("--weight_decay", type=float, default=0.0)
+    parser.add_argument("--adam_foreach", action=argparse.BooleanOptionalAction, default=False)
     parser.add_argument("--lr_scheduler_type", type=str, default="linear")
     parser.add_argument("--num_warmup_steps", type=int, default=0)
     parser.add_argument("--max_train_steps", type=int, default=100)
@@ -78,6 +82,8 @@ def parse_args(input_args=None):
     parser.add_argument("--baseline_eval_before_lut", action="store_true")
     parser.add_argument("--eval_only", action="store_true")
     parser.add_argument("--centroid_path", type=str, default=None)
+    parser.add_argument("--resume_from_lut_model", type=str, default=None)
+    parser.add_argument("--save_full_lut_model", action=argparse.BooleanOptionalAction, default=False)
     parser.add_argument("--output_dir", type=str, default="serialization_dir/qwen3_lut")
     return parser.parse_args(input_args)
 
@@ -314,13 +320,23 @@ def apply_lut_replacement(model, args):
 
 def configure_trainable_parameters(model, args):
     for param in model.parameters():
-        param.requires_grad = args.weight_requires_grad
+        param.requires_grad = args.weight_requires_grad and args.weight_trainable_scope == "all"
+
+    for name, param in model.named_parameters():
+        if args.freeze_embeddings and ("embed" in name.lower() or "embedding" in name.lower()):
+            param.requires_grad = False
+        if args.freeze_lm_head and name.startswith("lm_head."):
+            param.requires_grad = False
 
     lut_module_count = 0
     trainable_centroid_count = 0
     for module in model.modules():
         if isinstance(module, LUTLinear_t):
             lut_module_count += 1
+            if args.weight_trainable_scope == "lut_modules":
+                module.weight.requires_grad = args.weight_requires_grad
+                if module.bias is not None:
+                    module.bias.requires_grad = args.weight_requires_grad
             module.centroids.weight.requires_grad = args.centroid_requires_grad
             if args.centroid_requires_grad:
                 trainable_centroid_count += module.centroids.weight.numel()
@@ -329,6 +345,20 @@ def configure_trainable_parameters(model, args):
     if not trainable_params:
         raise ValueError("no trainable parameters; enable centroid or weight training")
     return trainable_params, lut_module_count, trainable_centroid_count
+
+
+def count_trainable_parameters(model):
+    counts = {"total": 0, "centroid": 0, "non_centroid": 0}
+    for name, param in model.named_parameters():
+        if not param.requires_grad:
+            continue
+        numel = param.numel()
+        counts["total"] += numel
+        if ".centroids.weight" in name or name.endswith("centroids.weight"):
+            counts["centroid"] += numel
+        else:
+            counts["non_centroid"] += numel
+    return counts
 
 
 def load_centroids_if_requested(model, centroid_path):
@@ -351,6 +381,93 @@ def load_centroids_if_requested(model, centroid_path):
     return loaded
 
 
+def _load_state_dict_file(path):
+    if str(path).endswith(".safetensors"):
+        from safetensors.torch import load_file
+
+        return load_file(path)
+
+    state = torch.load(path, map_location="cpu")
+    if isinstance(state, dict) and "state_dict" in state:
+        return state["state_dict"]
+    return state
+
+
+def _lut_model_state_files(lut_model_path):
+    path = Path(lut_model_path)
+    if path.is_file():
+        return [path]
+    if not path.is_dir():
+        raise FileNotFoundError(f"LUT model checkpoint does not exist: {lut_model_path}")
+
+    full_state_path = path / "full_lut_model_state.pt"
+    if full_state_path.exists():
+        return [full_state_path]
+
+    index_files = [
+        path / "model.safetensors.index.json",
+        path / "pytorch_model.bin.index.json",
+    ]
+    for index_path in index_files:
+        if index_path.exists():
+            with open(index_path, "r", encoding="utf-8") as f:
+                index = json.load(f)
+            filenames = sorted(set(index["weight_map"].values()))
+            return [path / filename for filename in filenames]
+
+    candidates = [
+        path / "model.safetensors",
+        path / "pytorch_model.bin",
+    ]
+    for candidate in candidates:
+        if candidate.exists():
+            return [candidate]
+
+    raise FileNotFoundError(
+        f"Could not find model.safetensors, pytorch_model.bin, or shard index in {lut_model_path}"
+    )
+
+
+def _normalize_lut_model_state_dict_for_model(model, state_dict):
+    model_keys = set(model.state_dict().keys())
+    state_keys = set(state_dict.keys())
+    original_overlap = len(model_keys & state_keys)
+
+    replacements = [
+        ("model.language_model.language_model.", "model."),
+        ("model.language_model.", "model."),
+        ("language_model.", "model."),
+    ]
+    best_state_dict = state_dict
+    best_overlap = original_overlap
+    for old_prefix, new_prefix in replacements:
+        normalized = {
+            (new_prefix + key[len(old_prefix) :]) if key.startswith(old_prefix) else key: value
+            for key, value in state_dict.items()
+        }
+        overlap = len(model_keys & set(normalized.keys()))
+        if overlap > best_overlap:
+            best_state_dict = normalized
+            best_overlap = overlap
+    return best_state_dict, best_overlap
+
+
+def load_lut_model_state_if_requested(model, lut_model_path):
+    if lut_model_path is None:
+        return 0
+
+    loaded_keys = 0
+    for state_file in _lut_model_state_files(lut_model_path):
+        state_dict = _load_state_dict_file(state_file)
+        state_dict, matched_keys = _normalize_lut_model_state_dict_for_model(model, state_dict)
+        model.load_state_dict(state_dict, strict=False)
+        loaded_keys += matched_keys
+        del state_dict
+    if loaded_keys == 0:
+        raise ValueError(f"No checkpoint keys from {lut_model_path} matched the LUT-converted model")
+    return loaded_keys
+
+
 def lut_state_dict(model):
     state = {}
     for name, module in model.named_modules():
@@ -368,6 +485,18 @@ def save_lut_state(model, tokenizer, args, accelerator):
     tokenizer.save_pretrained(args.output_dir)
     with open(os.path.join(args.output_dir, "lut_training_args.json"), "w", encoding="utf-8") as f:
         json.dump(vars(args), f, indent=2, sort_keys=True)
+
+
+def save_full_lut_model(model, tokenizer, args, accelerator):
+    accelerator.wait_for_everyone()
+    os.makedirs(args.output_dir, exist_ok=True)
+    unwrapped_model = accelerator.unwrap_model(model)
+    accelerator.save(unwrapped_model.state_dict(), os.path.join(args.output_dir, "full_lut_model_state.pt"))
+    if accelerator.is_main_process:
+        unwrapped_model.config.save_pretrained(args.output_dir)
+        tokenizer.save_pretrained(args.output_dir)
+        with open(os.path.join(args.output_dir, "lut_training_args.json"), "w", encoding="utf-8") as f:
+            json.dump(vars(args), f, indent=2, sort_keys=True)
 
 
 def max_eval_step_count(eval_dataloader, args):
@@ -433,6 +562,9 @@ def load_causal_lm_model(args, accelerator, label="model"):
 
 def main():
     args = parse_args()
+    if args.centroid_path is not None and args.resume_from_lut_model is not None:
+        raise ValueError("--centroid_path and --resume_from_lut_model are mutually exclusive")
+
     logging.basicConfig(
         format="%(asctime)s - %(levelname)s - %(name)s - %(message)s",
         datefmt="%m/%d/%Y %H:%M:%S",
@@ -487,11 +619,16 @@ def main():
     accelerator.print(f"Replacing target Linear modules with LUTLinear_t modules: target_modules={args.target_modules}")
     model = apply_lut_replacement(model, args)
     loaded_centroids = load_centroids_if_requested(model, args.centroid_path)
+    loaded_lut_model_keys = load_lut_model_state_if_requested(model, args.resume_from_lut_model)
     trainable_params, lut_module_count, trainable_centroid_count = configure_trainable_parameters(model, args)
+    trainable_counts = count_trainable_parameters(model)
 
     accelerator.print(
         f"LUT modules: {lut_module_count}, loaded centroid tensors: {loaded_centroids}, "
+        f"loaded full LUT checkpoint keys: {loaded_lut_model_keys}, "
         f"trainable centroid values: {trainable_centroid_count}, "
+        f"trainable total params: {trainable_counts['total']}, "
+        f"trainable non-centroid params: {trainable_counts['non_centroid']}, "
         f"residual_compensation_ratio={args.residual_compensation_ratio}, "
         f"residual_compensation_metric={args.residual_compensation_metric}, "
         f"activation_topk_only={args.activation_topk_only}"
@@ -505,7 +642,12 @@ def main():
         accelerator.print("Evaluation complete")
         return
 
-    optimizer = AdamW(trainable_params, lr=args.learning_rate, weight_decay=args.weight_decay)
+    optimizer = AdamW(
+        trainable_params,
+        lr=args.learning_rate,
+        weight_decay=args.weight_decay,
+        foreach=args.adam_foreach,
+    )
     lr_scheduler = get_scheduler(
         name=args.lr_scheduler_type,
         optimizer=optimizer,
@@ -577,7 +719,11 @@ def main():
 
     final_eval_loss, final_ppl = evaluate(model, eval_dataloader, accelerator, args, label="final_eval")
     accelerator.print(f"Final eval loss: {final_eval_loss:.6f}, perplexity: {final_ppl:.6f}")
-    accelerator.print(f"Saving LUT state and tokenizer to {args.output_dir}")
+    if args.save_full_lut_model:
+        accelerator.print(f"Saving full LUT model, LUT state, and tokenizer to {args.output_dir}")
+        save_full_lut_model(model, tokenizer, args, accelerator)
+    else:
+        accelerator.print(f"Saving LUT state and tokenizer to {args.output_dir}")
     save_lut_state(model, tokenizer, args, accelerator)
     accelerator.print("Training complete")
 
