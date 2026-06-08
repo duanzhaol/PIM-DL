@@ -1,0 +1,8 @@
+group,model,method,config,metric,value,nll,tokens,note
+representative_dppl,Qwen3.5-4B,dense,dense,d_ppl_isolated,7.170503193478727,1.969975832550496,1024,"decode-stage D-PPL, 2 wikipedia windows"
+representative_dppl,Qwen3.5-4B,pimdl_v16_c128_comp50,"K=128,V=16,online_comp=50%",d_ppl_isolated,7.55192683493413,2.0218027406254704,1024,increase_pct=5.3193; source=serialization_dir/qwen35_dppl_results/pimdl_v16_c128_comp50_abs_isolated_w2.json
+representative_dppl,Qwen3.5-4B,pimdl_v16_c128_comp50,"K=128,V=16,online_comp=50%",d_ppl_pathwise,7.657156287234569,2.0356406729497927,1024,increase_pct=6.7869; source=serialization_dir/qwen35_dppl_results/pimdl_v16_c128_comp50_abs_pathwise_w2.json
+representative_dppl,Qwen3.5-4B,pimdl_v64_c128_comp50,"K=128,V=64,online_comp=50%",d_ppl_isolated,7.757009099107886,2.0485968345269825,1024,increase_pct=8.1794; source=serialization_dir/qwen35_dppl_ratio_sweep_v64_c128/pimdl_v64_c128_ratio50_isolated.json
+representative_dppl,Qwen3.5-4B,pimdl_v64_c128_comp50,"K=128,V=64,online_comp=50%",d_ppl_pathwise,7.773676730991189,2.050743248209514,1024,increase_pct=8.4119; source=serialization_dir/qwen35_dppl_ratio_sweep_v64_c128/pimdl_v64_c128_ratio50_pathwise.json
+downstream_accuracy_existing_smoke,Qwen3-4B,dense_baseline,"Qwen3-4B dense, mmlu_pro limit smoke",mmlu_pro_exact_match_custom_extract,0.5785714285714286,,,source=serialization_dir/lm_eval_mmlu_pro_baseline_limit5.json; not Qwen3.5 D-PPL setup
+downstream_accuracy_existing_smoke,Qwen3-4B,pimdl_lut,Qwen3-4B PIM-DL LUT smoke; filename v2_c32; mmlu_pro limit smoke,mmlu_pro_exact_match_custom_extract,0.04285714285714286,,,source=serialization_dir/lm_eval_mmlu_pro_lut_v2_c32_fast_limit5_gen128.json; not Qwen3.5 D-PPL setup

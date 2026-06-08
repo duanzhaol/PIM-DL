@@ -1,0 +1,1201 @@
+tile_size_v,tiling,tile_id,channels
+4,best_effort_greedy,0,3 56 7 104
+4,best_effort_greedy,1,1 0 4 211
+4,best_effort_greedy,2,5 136 63 74
+4,best_effort_greedy,3,2 30 26 93
+4,best_effort_greedy,4,66 25 35 17
+4,best_effort_greedy,5,55 24 117 22
+4,best_effort_greedy,6,96 113 42 27
+4,best_effort_greedy,7,23 53 51 94
+4,best_effort_greedy,8,19 270 32 286
+4,best_effort_greedy,9,52 197 47 181
+4,best_effort_greedy,10,46 31 219 291
+4,best_effort_greedy,11,37 12 64 50
+4,best_effort_greedy,12,91 54 294 128
+4,best_effort_greedy,13,34 29 354 43
+4,best_effort_greedy,14,125 190 11 10
+4,best_effort_greedy,15,8 261 68 16
+4,best_effort_greedy,16,102 45 308 39
+4,best_effort_greedy,17,21 58 9 198
+4,best_effort_greedy,18,20 1315 130 177
+4,best_effort_greedy,19,15 159 77 33
+4,best_effort_greedy,20,78 13 359 60
+4,best_effort_greedy,21,169 76 57 28
+4,best_effort_greedy,22,36 776 2399 832
+4,best_effort_greedy,23,49 40 120 82
+4,best_effort_greedy,24,18 84 61 184
+4,best_effort_greedy,25,259 388 321 295
+4,best_effort_greedy,26,83 240 352 132
+4,best_effort_greedy,27,134 202 409 75
+4,best_effort_greedy,28,350 62 87 179
+4,best_effort_greedy,29,143 318 372 95
+4,best_effort_greedy,30,324 116 265 507
+4,best_effort_greedy,31,6 151 107 249
+4,best_effort_greedy,32,556 343 394 368
+4,best_effort_greedy,33,162 254 322 145
+4,best_effort_greedy,34,99 90 203 250
+4,best_effort_greedy,35,303 606 400 147
+4,best_effort_greedy,36,112 411 522 428
+4,best_effort_greedy,37,97 157 252 586
+4,best_effort_greedy,38,608 140 293 470
+4,best_effort_greedy,39,236 819 374 398
+4,best_effort_greedy,40,305 414 70 328
+4,best_effort_greedy,41,319 137 89 149
+4,best_effort_greedy,42,191 432 266 954
+4,best_effort_greedy,43,309 528 642 336
+4,best_effort_greedy,44,1009 860 1146 1867
+4,best_effort_greedy,45,284 1167 614 573
+4,best_effort_greedy,46,282 332 346 448
+4,best_effort_greedy,47,550 1742 244 290
+4,best_effort_greedy,48,366 604 1282 273
+4,best_effort_greedy,49,483 826 600 541
+4,best_effort_greedy,50,267 883 437 499
+4,best_effort_greedy,51,141 215 278 306
+4,best_effort_greedy,52,242 253 165 233
+4,best_effort_greedy,53,65 525 908 800
+4,best_effort_greedy,54,257 1392 966 378
+4,best_effort_greedy,55,220 144 269 48
+4,best_effort_greedy,56,387 391 648 519
+4,best_effort_greedy,57,71 338 108 260
+4,best_effort_greedy,58,106 115 152 200
+4,best_effort_greedy,59,330 652 482 1480
+4,best_effort_greedy,60,371 331 575 1819
+4,best_effort_greedy,61,277 297 101 347
+4,best_effort_greedy,62,285 263 121 234
+4,best_effort_greedy,63,363 1335 2297 1061
+4,best_effort_greedy,64,403 1582 98 205
+4,best_effort_greedy,65,355 1798 154 111
+4,best_effort_greedy,66,217 1126 360 1792
+4,best_effort_greedy,67,171 317 405 326
+4,best_effort_greedy,68,221 192 481 558
+4,best_effort_greedy,69,367 496 1491 571
+4,best_effort_greedy,70,698 991 1511 1188
+4,best_effort_greedy,71,172 238 845 2462
+4,best_effort_greedy,72,41 998 599 397
+4,best_effort_greedy,73,1598 1226 2323 2070
+4,best_effort_greedy,74,395 445 327 194
+4,best_effort_greedy,75,1148 1482 1117 579
+4,best_effort_greedy,76,384 779 138 335
+4,best_effort_greedy,77,80 509 247 92
+4,best_effort_greedy,78,88 193 161 173
+4,best_effort_greedy,79,1172 1078 1630 1244
+4,best_effort_greedy,80,418 647 344 314
+4,best_effort_greedy,81,1505 1143 1147 1202
+4,best_effort_greedy,82,2282 1325 288 114
+4,best_effort_greedy,83,228 176 227 225
+4,best_effort_greedy,84,351 333 129 153
+4,best_effort_greedy,85,1377 1662 1438 2276
+4,best_effort_greedy,86,1519 1691 1138 1531
+4,best_effort_greedy,87,818 1014 2100 1367
+4,best_effort_greedy,88,524 674 413 182
+4,best_effort_greedy,89,1770 1052 1747 1882
+4,best_effort_greedy,90,726 545 870 643
+4,best_effort_greedy,91,264 224 792 1676
+4,best_effort_greedy,92,382 404 965 904
+4,best_effort_greedy,93,506 458 1462 2547
+4,best_effort_greedy,94,135 124 466 356
+4,best_effort_greedy,95,944 694 231 164
+4,best_effort_greedy,96,2240 1702 1609 1928
+4,best_effort_greedy,97,370 535 155 526
+4,best_effort_greedy,98,1453 393 1048 646
+4,best_effort_greedy,99,361 1086 732 1265
+4,best_effort_greedy,100,419 14 877 410
+4,best_effort_greedy,101,1700 1046 2427 1388
+4,best_effort_greedy,102,850 1013 1231 517
+4,best_effort_greedy,103,2223 945 1303 1947
+4,best_effort_greedy,104,434 484 416 838
+4,best_effort_greedy,105,1799 2145 729 1420
+4,best_effort_greedy,106,229 183 123 79
+4,best_effort_greedy,107,551 1966 1365 2002
+4,best_effort_greedy,108,369 610 578 465
+4,best_effort_greedy,109,180 255 510 718
+4,best_effort_greedy,110,924 1599 1901 980
+4,best_effort_greedy,111,345 377 72 214
+4,best_effort_greedy,112,502 537 1461 349
+4,best_effort_greedy,113,325 2085 1332 1784
+4,best_effort_greedy,114,226 617 69 127
+4,best_effort_greedy,115,281 588 268 246
+4,best_effort_greedy,116,316 1912 292 1584
+4,best_effort_greedy,117,798 1941 868 667
+4,best_effort_greedy,118,666 581 712 518
+4,best_effort_greedy,119,1589 928 2089 613
+4,best_effort_greedy,120,1663 1182 2553 786
+4,best_effort_greedy,121,122 300 443 415
+4,best_effort_greedy,122,442 1746 1545 1971
+4,best_effort_greedy,123,383 150 312 218
+4,best_effort_greedy,124,2228 1738 1605 1957
+4,best_effort_greedy,125,505 660 485 539
+4,best_effort_greedy,126,1456 1776 529 923
+4,best_effort_greedy,127,480 906 2423 1066
+4,best_effort_greedy,128,444 340 313 475
+4,best_effort_greedy,129,1199 2539 861 2300
+4,best_effort_greedy,130,167 210 110 245
+4,best_effort_greedy,131,918 706 170 103
+4,best_effort_greedy,132,1566 1675 1969 1497
+4,best_effort_greedy,133,972 951 549 1446
+4,best_effort_greedy,134,474 1104 2262 1334
+4,best_effort_greedy,135,1076 1194 1381 2443
+4,best_effort_greedy,136,532 851 1889 1507
+4,best_effort_greedy,137,2160 1668 1710 592
+4,best_effort_greedy,138,1701 1633 2420 1195
+4,best_effort_greedy,139,296 131 489 849
+4,best_effort_greedy,140,248 199 209 223
+4,best_effort_greedy,141,187 133 105 174
+4,best_effort_greedy,142,488 1344 747 1737
+4,best_effort_greedy,143,160 353 386 494
+4,best_effort_greedy,144,2109 426 631 2499
+4,best_effort_greedy,145,2006 1329 2500 859
+4,best_effort_greedy,146,671 875 746 932
+4,best_effort_greedy,147,1490 1938 1843 396
+4,best_effort_greedy,148,495 476 298 654
+4,best_effort_greedy,149,1153 2101 1430 1361
+4,best_effort_greedy,150,357 1399 1299 1097
+4,best_effort_greedy,151,341 421 498 188
+4,best_effort_greedy,152,2524 1501 2045 454
+4,best_effort_greedy,153,320 362 618 931
+4,best_effort_greedy,154,435 728 1032 1724
+4,best_effort_greedy,155,553 1634 1727 1368
+4,best_effort_greedy,156,429 2298 1116 447
+4,best_effort_greedy,157,508 389 2065 871
+4,best_effort_greedy,158,952 775 310 1389
+4,best_effort_greedy,159,806 1590 1443 2096
+4,best_effort_greedy,160,1036 950 1209 1944
+4,best_effort_greedy,161,1942 2411 2167 2249
+4,best_effort_greedy,162,1169 619 814 2214
+4,best_effort_greedy,163,534 591 672 1005
+4,best_effort_greedy,164,479 420 1753 402
+4,best_effort_greedy,165,1208 2218 2023 1679
+4,best_effort_greedy,166,815 1256 795 1465
+4,best_effort_greedy,167,1203 1850 2074 1820
+4,best_effort_greedy,168,468 520 139 212
+4,best_effort_greedy,169,602 982 412 251
+4,best_effort_greedy,170,423 559 1733 1521
+4,best_effort_greedy,171,178 422 256 175
+4,best_effort_greedy,172,235 272 201 271
+4,best_effort_greedy,173,196 222 823 375
+4,best_effort_greedy,174,2476 894 118 1810
+4,best_effort_greedy,175,587 503 701 390
+4,best_effort_greedy,176,459 431 847 430
+4,best_effort_greedy,177,81 148 142 168
+4,best_effort_greedy,178,809 1095 2557 895
+4,best_effort_greedy,179,2163 1549 1240 1848
+4,best_effort_greedy,180,768 2396 665 491
+4,best_effort_greedy,181,329 283 1905 490
+4,best_effort_greedy,182,1369 590 668 1083
+4,best_effort_greedy,183,1419 1041 73 1157
+4,best_effort_greedy,184,572 243 258 487
+4,best_effort_greedy,185,827 427 1391 935
+4,best_effort_greedy,186,1326 1568 2385 1196
+4,best_effort_greedy,187,1464 984 1379 2284
+4,best_effort_greedy,188,2072 938 1983 2254
+4,best_effort_greedy,189,1640 1356 1895 1071
+4,best_effort_greedy,190,1376 1498 1513 2151
+4,best_effort_greedy,191,2258 1906 1429 1218
+4,best_effort_greedy,192,1118 1823 887 1270
+4,best_effort_greedy,193,1092 892 1030 893
+4,best_effort_greedy,194,681 552 1271 1649
+4,best_effort_greedy,195,940 543 693 634
+4,best_effort_greedy,196,1038 1183 1937 812
+4,best_effort_greedy,197,2211 1374 1483 1192
+4,best_effort_greedy,198,1423 2446 1735 1525
+4,best_effort_greedy,199,790 580 1212 1037
+4,best_effort_greedy,200,896 670 241 156
+4,best_effort_greedy,201,2001 1845 1664 963
+4,best_effort_greedy,202,1439 2325 2400 2229
+4,best_effort_greedy,203,711 1426 753 2008
+4,best_effort_greedy,204,620 1045 1773 2529
+4,best_effort_greedy,205,446 275 158 562
+4,best_effort_greedy,206,1600 2296 1180 1688
+4,best_effort_greedy,207,1068 514 1131 1685
+4,best_effort_greedy,208,1433 1532 2481 2277
+4,best_effort_greedy,209,1833 1635 1696 1311
+4,best_effort_greedy,210,1604 547 2288 1395
+4,best_effort_greedy,211,453 1612 1110 1812
+4,best_effort_greedy,212,1077 1372 1479 2244
+4,best_effort_greedy,213,867 1408 2196 796
+4,best_effort_greedy,214,2477 583 1550 1177
+4,best_effort_greedy,215,664 564 656 974
+4,best_effort_greedy,216,794 433 1699 2142
+4,best_effort_greedy,217,1886 1144 690 1259
+4,best_effort_greedy,218,280 880 2402 538
+4,best_effort_greedy,219,1310 1165 2257 2086
+4,best_effort_greedy,220,1288 1855 2351 1236
+4,best_effort_greedy,221,1380 2192 1452 805
+4,best_effort_greedy,222,1567 1644 1275 2417
+4,best_effort_greedy,223,989 85 1980 597
+4,best_effort_greedy,224,865 2360 1022 2247
+4,best_effort_greedy,225,973 2191 2093 1398
+4,best_effort_greedy,226,1542 1040 1765 1606
+4,best_effort_greedy,227,1496 1463 1293 1330
+4,best_effort_greedy,228,692 689 939 230
+4,best_effort_greedy,229,720 2251 473 2279
+4,best_effort_greedy,230,401 2316 315 1170
+4,best_effort_greedy,231,2348 1611 1929 2340
+4,best_effort_greedy,232,1072 2189 1537 1533
+4,best_effort_greedy,233,1551 1835 1576 2430
+4,best_effort_greedy,234,858 1870 882 2329
+4,best_effort_greedy,235,725 1988 625 742
+4,best_effort_greedy,236,146 565 807 632
+4,best_effort_greedy,237,1854 1241 2428 1151
+4,best_effort_greedy,238,2422 425 1094 1024
+4,best_effort_greedy,239,1492 959 1227 2466
+4,best_effort_greedy,240,2530 2472 440 544
+4,best_effort_greedy,241,755 635 1761 1221
+4,best_effort_greedy,242,561 504 1090 788
+4,best_effort_greedy,243,2267 2485 2034 1538
+4,best_effort_greedy,244,455 1896 2429 1219
+4,best_effort_greedy,245,585 1486 763 1053
+4,best_effort_greedy,246,2013 2058 1786 2515
+4,best_effort_greedy,247,339 406 276 703
+4,best_effort_greedy,248,1881 1383 1813 1099
+4,best_effort_greedy,249,2545 623 1359 2220
+4,best_effort_greedy,250,707 1412 563 1666
+4,best_effort_greedy,251,1159 901 748 195
+4,best_effort_greedy,252,2542 1694 2073 641
+4,best_effort_greedy,253,2004 2320 2308 1206
+4,best_effort_greedy,254,1075 2405 1242 1228
+4,best_effort_greedy,255,1636 1435 1917 985
+4,best_effort_greedy,256,407 1744 2113 1789
+4,best_effort_greedy,257,1122 999 655 1601
+4,best_effort_greedy,258,687 778 1205 2336
+4,best_effort_greedy,259,839 2182 2410 2391
+4,best_effort_greedy,260,986 829 912 709
+4,best_effort_greedy,261,2266 785 1319 1425
+4,best_effort_greedy,262,2460 2053 2020 1774
+4,best_effort_greedy,263,697 2439 1055 2239
+4,best_effort_greedy,264,593 2436 408 1800
+4,best_effort_greedy,265,2384 1876 1327 1385
+4,best_effort_greedy,266,1360 1814 1904 2403
+4,best_effort_greedy,267,611 787 828 1200
+4,best_effort_greedy,268,695 1358 2425 1488
+4,best_effort_greedy,269,342 1171 2092 1160
+4,best_effort_greedy,270,2155 1743 885 1594
+4,best_effort_greedy,271,627 1731 771 511
+4,best_effort_greedy,272,59 872 2326 715
+4,best_effort_greedy,273,533 569 700 186
+4,best_effort_greedy,274,803 1105 866 2099
+4,best_effort_greedy,275,299 844 601 323
+4,best_effort_greedy,276,946 1373 716 1084
+4,best_effort_greedy,277,232 536 462 967
+4,best_effort_greedy,278,2354 1965 2438 2171
+4,best_effort_greedy,279,2158 1079 2110 1593
+4,best_effort_greedy,280,307 385 206 708
+4,best_effort_greedy,281,381 1766 2368 949
+4,best_effort_greedy,282,1837 2444 2309 1705
+4,best_effort_greedy,283,2227 1163 2382 2206
+4,best_effort_greedy,284,464 2319 612 615
+4,best_effort_greedy,285,1556 2159 2393 2386
+4,best_effort_greedy,286,1933 1416 1080 1321
+4,best_effort_greedy,287,86 2359 1626 1450
+4,best_effort_greedy,288,2512 478 2358 516
+4,best_effort_greedy,289,969 1581 2049 756
+4,best_effort_greedy,290,451 1286 937 616
+4,best_effort_greedy,291,2026 2271 1972 876
+4,best_effort_greedy,292,834 546 2021 1821
+4,best_effort_greedy,293,1454 2036 2265 669
+4,best_effort_greedy,294,2154 1529 2401 1565
+4,best_effort_greedy,295,2201 645 379 302
+4,best_effort_greedy,296,2349 964 773 1033
+4,best_effort_greedy,297,2078 1006 1317 2231
+4,best_effort_greedy,298,719 657 750 461
+4,best_effort_greedy,299,636 772 1407 680
+4,best_effort_greedy,300,438 477 2449 1277
+4,best_effort_greedy,301,2406 1338 837 1780
+4,best_effort_greedy,302,486 710 582 2038
+4,best_effort_greedy,303,723 1101 1362 2137
+4,best_effort_greedy,304,1755 44 1016 1474
+4,best_effort_greedy,305,1336 2290 1856 1403
+4,best_effort_greedy,306,279 450 2179 1686
+4,best_effort_greedy,307,856 1578 1291 683
+4,best_effort_greedy,308,920 1546 1748 1179
+4,best_effort_greedy,309,2202 1756 2175 1459
+4,best_effort_greedy,310,739 548 239 568
+4,best_effort_greedy,311,1120 2025 2486 1862
+4,best_effort_greedy,312,1156 166 1375 2128
+4,best_effort_greedy,313,1387 1139 2498 449
+4,best_effort_greedy,314,791 1031 2250 854
+4,best_effort_greedy,315,752 1574 542 1628
+4,best_effort_greedy,316,1967 2252 761 730
+4,best_effort_greedy,317,1769 2483 2108 2153
+4,best_effort_greedy,318,1133 1750 2285 1346
+4,best_effort_greedy,319,358 970 971 926
+4,best_effort_greedy,320,1778 1469 2461 1039
+4,best_effort_greedy,321,2184 1703 67 956
+4,best_effort_greedy,322,869 1103 1930 2237
+4,best_effort_greedy,323,289 584 699 1418
+4,best_effort_greedy,324,1257 1279 933 1121
+4,best_effort_greedy,325,337 929 628 467
+4,best_effort_greedy,326,644 2488 521 696
+4,best_effort_greedy,327,1058 1350 424 754
+4,best_effort_greedy,328,463 471 2555 1306
+4,best_effort_greedy,329,1233 1357 846 1322
+4,best_effort_greedy,330,993 975 531 1767
+4,best_effort_greedy,331,922 1591 530 751
+4,best_effort_greedy,332,685 1926 523 793
+4,best_effort_greedy,333,1512 2317 1943 2435
+4,best_effort_greedy,334,456 741 2508 589
+4,best_effort_greedy,335,1874 1255 1302 399
+4,best_effort_greedy,336,380 441 767 820
+4,best_effort_greedy,337,2310 2390 2048 841
+4,best_effort_greedy,338,1515 1089 1729 1249
+4,best_effort_greedy,339,1354 1987 1997 762
+4,best_effort_greedy,340,1919 594 287 311
+4,best_effort_greedy,341,1467 1130 1817 1070
+4,best_effort_greedy,342,1627 1355 1223 1025
+4,best_effort_greedy,343,1754 1230 304 2079
+4,best_effort_greedy,344,204 497 2147 1629
+4,best_effort_greedy,345,2083 1127 927 1834
+4,best_effort_greedy,346,1224 1911 2194 727
+4,best_effort_greedy,347,2022 2245 1285 702
+4,best_effort_greedy,348,1152 1260 1370 2198
+4,best_effort_greedy,349,639 1154 769 1592
+4,best_effort_greedy,350,1608 1927 500 770
+4,best_effort_greedy,351,1825 1547 1029 1447
+4,best_effort_greedy,352,2017 1472 1847 1000
+4,best_effort_greedy,353,2431 863 734 2221
+4,best_effort_greedy,354,691 898 843 1304
+4,best_effort_greedy,355,439 1074 1207 2387
+4,best_effort_greedy,356,2532 675 916 640
+4,best_effort_greedy,357,1457 1726 1351 1645
+4,best_effort_greedy,358,925 833 492 1141
+4,best_effort_greedy,359,1665 1021 2193 1437
+4,best_effort_greedy,360,733 512 921 2482
+4,best_effort_greedy,361,2088 1544 2077 1278
+4,best_effort_greedy,362,1258 688 1248 2379
+4,best_effort_greedy,363,365 760 1178 784
+4,best_effort_greedy,364,816 2421 1057 1962
+4,best_effort_greedy,365,472 915 886 1424
+4,best_effort_greedy,366,1073 2510 1709 574
+4,best_effort_greedy,367,992 1193 2087 1308
+4,best_effort_greedy,368,1523 1925 996 1487
+4,best_effort_greedy,369,662 2112 713 1476
+4,best_effort_greedy,370,1449 1534 1382 1977
+4,best_effort_greedy,371,1413 554 1201 1251
+4,best_effort_greedy,372,1428 2106 799 1973
+4,best_effort_greedy,373,567 2037 1891 1384
+4,best_effort_greedy,374,941 605 897 673
+4,best_effort_greedy,375,955 2126 2470 2130
+4,best_effort_greedy,376,781 663 2150 679
+4,best_effort_greedy,377,527 765 953 2334
+4,best_effort_greedy,378,766 909 981 1027
+4,best_effort_greedy,379,978 1119 2187 1067
+4,best_effort_greedy,380,1690 2274 1198 1342
+4,best_effort_greedy,381,1614 1682 1716 2242
+4,best_effort_greedy,382,1849 1572 1783 1561
+4,best_effort_greedy,383,2352 2383 1797 783
+4,best_effort_greedy,384,2098 1290 2502 2060
+4,best_effort_greedy,385,2115 1455 1475 658
+4,best_effort_greedy,386,659 1247 2339 1026
+4,best_effort_greedy,387,684 650 1018 910
+4,best_effort_greedy,388,1741 1659 2124 1448
+4,best_effort_greedy,389,1955 1296 2195 1352
+4,best_effort_greedy,390,1468 2146 2225 2398
+4,best_effort_greedy,391,2230 2440 622 1893
+4,best_effort_greedy,392,1951 1554 2161 1934
+4,best_effort_greedy,393,2318 1353 1894 1827
+4,best_effort_greedy,394,1999 1795 1204 1851
+4,best_effort_greedy,395,831 2010 1216 749
+4,best_effort_greedy,396,1125 1615 2241 1210
+4,best_effort_greedy,397,334 714 1112 1758
+4,best_effort_greedy,398,1035 2324 1081 2028
+4,best_effort_greedy,399,301 126 738 262
+4,best_effort_greedy,400,774 2503 2442 1106
+4,best_effort_greedy,401,1267 1852 853 764
+4,best_effort_greedy,402,2418 2205 1485 1318
+4,best_effort_greedy,403,1563 1683 2185 2097
+4,best_effort_greedy,404,560 185 557 109
+4,best_effort_greedy,405,1931 633 2548 879
+4,best_effort_greedy,406,1583 960 1215 888
+4,best_effort_greedy,407,1916 1948 1844 1431
+4,best_effort_greedy,408,1643 2069 1298 2188
+4,best_effort_greedy,409,1261 1564 1762 2538
+4,best_effort_greedy,410,621 2307 1620 1728
+4,best_effort_greedy,411,1340 934 2056 2370
+4,best_effort_greedy,412,2118 2306 2199 1616
+4,best_effort_greedy,413,2051 2138 2062 2459
+4,best_effort_greedy,414,596 2484 1804 2367
+4,best_effort_greedy,415,1481 1378 2321 1011
+4,best_effort_greedy,416,2506 1238 1508 2369
+4,best_effort_greedy,417,1065 836 501 2441
+4,best_effort_greedy,418,566 2207 930 2394
+4,best_effort_greedy,419,1484 1451 962 1145
+4,best_effort_greedy,420,1725 1898 2234 2415
+4,best_effort_greedy,421,899 947 1826 2011
+4,best_effort_greedy,422,682 1672 2123 1341
+4,best_effort_greedy,423,1324 2540 1959 2255
+4,best_effort_greedy,424,2035 1363 2311 1191
+4,best_effort_greedy,425,1982 1777 2177 2493
+4,best_effort_greedy,426,873 1252 704 911
+4,best_effort_greedy,427,1527 1946 2081 2331
+4,best_effort_greedy,428,555 1869 452 1010
+4,best_effort_greedy,429,460 2463 1908 1610
+4,best_effort_greedy,430,598 731 515 457
+4,best_effort_greedy,431,1816 1907 2248 2140
+4,best_effort_greedy,432,857 1082 2136 1868
+4,best_effort_greedy,433,1730 1695 864 2533
+4,best_effort_greedy,434,1493 1264 1806 1189
+4,best_effort_greedy,435,1961 1877 2389 2133
+4,best_effort_greedy,436,1088 1650 1963 2556
+4,best_effort_greedy,437,1349 1830 1333 1831
+4,best_effort_greedy,438,2135 2473 1880 842
+4,best_effort_greedy,439,1863 2519 1047 1763
+4,best_effort_greedy,440,651 813 1902 948
+4,best_effort_greedy,441,1528 2327 1504 2164
+4,best_effort_greedy,442,1003 1945 2217 2378
+4,best_effort_greedy,443,2114 1314 1749 2377
+4,best_effort_greedy,444,995 2505 2492 1250
+4,best_effort_greedy,445,797 824 2270 758
+4,best_effort_greedy,446,1595 1864 2075 2041
+4,best_effort_greedy,447,1712 1253 1054 2076
+4,best_effort_greedy,448,1129 1220 1540 822
+4,best_effort_greedy,449,983 2514 1622 2419
+4,best_effort_greedy,450,2014 1887 1087 2007
+4,best_effort_greedy,451,1402 2141 1782 1414
+4,best_effort_greedy,452,835 364 1613 961
+4,best_effort_greedy,453,862 1846 743 1246
+4,best_effort_greedy,454,1495 1990 1028 1524
+4,best_effort_greedy,455,830 213 469 1641
+4,best_effort_greedy,456,2226 1289 1994 1502
+4,best_effort_greedy,457,1718 1002 1824 2148
+4,best_effort_greedy,458,1557 1155 1062 1235
+4,best_effort_greedy,459,1958 1132 2457 2345
+4,best_effort_greedy,460,1162 2003 2232 2374
+4,best_effort_greedy,461,2186 757 902 2388
+4,best_effort_greedy,462,759 997 740 2517
+4,best_effort_greedy,463,1190 1518 1415 1427
+4,best_effort_greedy,464,1875 2269 1577 1229
+4,best_effort_greedy,465,1135 1526 1471 1607
+4,best_effort_greedy,466,2450 1992 2322 2261
+4,best_effort_greedy,467,1631 1158 2033 903
+4,best_effort_greedy,468,2134 1840 913 2534
+4,best_effort_greedy,469,1063 801 2295 2162
+4,best_effort_greedy,470,2236 724 2375 1579
+4,best_effort_greedy,471,1500 1998 1123 958
+4,best_effort_greedy,472,1717 1839 1655 2433
+4,best_effort_greedy,473,744 2366 2018 2335
+4,best_effort_greedy,474,1316 1409 2157 1301
+4,best_effort_greedy,475,392 943 2531 1232
+4,best_effort_greedy,476,1785 1516 1871 1759
+4,best_effort_greedy,477,721 2024 2333 2046
+4,best_effort_greedy,478,900 1575 1124 1213
+4,best_effort_greedy,479,2380 1107 1161 2170
+4,best_effort_greedy,480,1020 1051 2132 1458
+4,best_effort_greedy,481,677 1713 1873 1406
+4,best_effort_greedy,482,2445 1093 1674 2139
+4,best_effort_greedy,483,821 1866 2363 1134
+4,best_effort_greedy,484,1312 2165 2116 1339
+4,best_effort_greedy,485,1168 1243 2312 1698
+4,best_effort_greedy,486,1343 436 1802 1714
+4,best_effort_greedy,487,1602 840 2054 1292
+4,best_effort_greedy,488,1004 1543 1478 2280
+4,best_effort_greedy,489,2487 1281 2448 705
+4,best_effort_greedy,490,2071 1623 1396 2516
+4,best_effort_greedy,491,208 1489 1254 570
+4,best_effort_greedy,492,2039 2063 2468 2104
+4,best_effort_greedy,493,722 2497 1331 979
+4,best_effort_greedy,494,1432 1865 2376 2412
+4,best_effort_greedy,495,1625 2286 2511 1923
+4,best_effort_greedy,496,493 1787 1721 2209
+4,best_effort_greedy,497,1559 1745 745 1284
+4,best_effort_greedy,498,1970 2173 2120 2015
+4,best_effort_greedy,499,936 661 2107 603
+4,best_effort_greedy,500,2495 1394 1879 2029
+4,best_effort_greedy,501,2059 1884 1853 1914
+4,best_effort_greedy,502,2197 417 2235 2305
+4,best_effort_greedy,503,2544 1128 1681 1673
+4,best_effort_greedy,504,676 1878 891 2131
+4,best_effort_greedy,505,2181 1954 2535 1656
+4,best_effort_greedy,506,1768 1266 782 942
+4,best_effort_greedy,507,1704 2304 2372 1740
+4,best_effort_greedy,508,825 1309 2156 2278
+4,best_effort_greedy,509,1828 2030 1553 1149
+4,best_effort_greedy,510,2558 1393 810 1653
+4,best_effort_greedy,511,990 804 2200 1678
+4,best_effort_greedy,512,1639 1520 2453 1300
+4,best_effort_greedy,513,1751 2357 2413 2328
+4,best_effort_greedy,514,1771 649 1466 1939
+4,best_effort_greedy,515,1936 1539 917 2451
+4,best_effort_greedy,516,1573 1805 1294 1715
+4,best_effort_greedy,517,1530 1371 2044 1328
+4,best_effort_greedy,518,2315 2176 1711 2478
+4,best_effort_greedy,519,1555 1899 2263 1989
+4,best_effort_greedy,520,1274 1043 1571 1803
+4,best_effort_greedy,521,1017 2052 1775 1410
+4,best_effort_greedy,522,637 905 1915 1796
+4,best_effort_greedy,523,1618 1548 1345 1503
+4,best_effort_greedy,524,1764 1935 2149 1888
+4,best_effort_greedy,525,736 609 1790 1752
+4,best_effort_greedy,526,1473 1064 2507 1108
+4,best_effort_greedy,527,237 207 189 624
+4,best_effort_greedy,528,1366 1953 1981 1091
+4,best_effort_greedy,529,914 1588 2550 1619
+4,best_effort_greedy,530,2119 2064 1920 2080
+4,best_effort_greedy,531,1506 2469 1422 1142
+4,best_effort_greedy,532,1603 1222 2027 1692
+4,best_effort_greedy,533,1440 1587 1150 1652
+4,best_effort_greedy,534,717 907 1187 1023
+4,best_effort_greedy,535,686 1100 2219 1811
+4,best_effort_greedy,536,737 1872 2067 1470
+4,best_effort_greedy,537,1968 889 884 2102
+4,best_effort_greedy,538,629 1225 376 1671
+4,best_effort_greedy,539,2301 2313 2122 1386
+4,best_effort_greedy,540,874 2362 2066 1390
+4,best_effort_greedy,541,595 1585 1788 1114
+4,best_effort_greedy,542,1140 1269 789 1234
+4,best_effort_greedy,543,802 2172 1975 2346
+4,best_effort_greedy,544,2395 2117 2042 976
+4,best_effort_greedy,545,163 2222 1307 1276
+4,best_effort_greedy,546,1273 994 2342 2256
+4,best_effort_greedy,547,576 2365 2522 2061
+4,best_effort_greedy,548,2467 1113 2494 1979
+4,best_effort_greedy,549,1913 577 811 1111
+4,best_effort_greedy,550,1007 1280 2490 1049
+4,best_effort_greedy,551,1001 1184 1050 2103
+4,best_effort_greedy,552,2144 1313 1736 1262
+4,best_effort_greedy,553,1173 2343 348 2129
+4,best_effort_greedy,554,1757 1263 2082 2521
+4,best_effort_greedy,555,735 1295 2432 1197
+4,best_effort_greedy,556,1411 2272 1237 1952
+4,best_effort_greedy,557,1996 2525 1648 1670
+4,best_effort_greedy,558,1964 2264 1297 2125
+4,best_effort_greedy,559,1832 626 38 638
+4,best_effort_greedy,560,1859 1320 1624 1801
+4,best_effort_greedy,561,848 1638 1164 2213
+4,best_effort_greedy,562,100 1034 1647 2180
+4,best_effort_greedy,563,777 1211 119 1305
+4,best_effort_greedy,564,1706 2168 274 2528
+4,best_effort_greedy,565,855 2016 2509 2537
+4,best_effort_greedy,566,1102 2424 1098 1272
+4,best_effort_greedy,567,1401 540 2347 2361
+4,best_effort_greedy,568,1719 2480 988 2105
+4,best_effort_greedy,569,2208 2268 1793 2111
+4,best_effort_greedy,570,2127 1494 1560 1405
+4,best_effort_greedy,571,1186 2057 1984 1044
+4,best_effort_greedy,572,957 2090 2437 2040
+4,best_effort_greedy,573,1890 2212 817 2091
+4,best_effort_greedy,574,2253 1597 1642 2381
+4,best_effort_greedy,575,1552 2404 2397 2554
+4,best_effort_greedy,576,1722 890 1570 1181
+4,best_effort_greedy,577,2447 1818 2259 1637
+4,best_effort_greedy,578,977 2504 1166 1042
+4,best_effort_greedy,579,808 1434 1239 1654
+4,best_effort_greedy,580,2552 2299 1924 1892
+4,best_effort_greedy,581,2491 2454 2409 2546
+4,best_effort_greedy,582,1536 1841 1772 2364
+4,best_effort_greedy,583,852 1136 2373 2095
+4,best_effort_greedy,584,1056 2527 1347 1364
+4,best_effort_greedy,585,2050 1069 2152 1949
+4,best_effort_greedy,586,2031 2273 2283 1477
+4,best_effort_greedy,587,1214 607 1185 1558
+4,best_effort_greedy,588,1689 1976 1781 1596
+4,best_effort_greedy,589,2169 373 2224 2009
+4,best_effort_greedy,590,653 1404 1657 2330
+4,best_effort_greedy,591,1918 1779 1445 1883
+4,best_effort_greedy,592,2216 1012 1734 1417
+4,best_effort_greedy,593,2204 2416 2341 1950
+4,best_effort_greedy,594,2543 2055 2518 2005
+4,best_effort_greedy,595,1739 1174 2559 1687
+4,best_effort_greedy,596,1932 2068 2243 1940
+4,best_effort_greedy,597,1109 1815 2032 1085
+4,best_effort_greedy,598,2434 1667 1669 1677
+4,best_effort_greedy,599,2455 2371 1323 2233
+4,best_effort_greedy,600,2178 919 2215 2392
+4,best_effort_greedy,601,2456 2408 1096 2294
+4,best_effort_greedy,602,1019 1660 987 1807
+4,best_effort_greedy,603,1510 2287 1707 1444
+4,best_effort_greedy,604,2475 1693 2260 1621
+4,best_effort_greedy,605,2350 1697 1708 1723
+4,best_effort_greedy,606,1441 1995 2281 1794
+4,best_effort_greedy,607,1978 1885 878 1499
+4,best_effort_greedy,608,1651 1861 2344 1337
+4,best_effort_greedy,609,2019 1760 1283 1421
+4,best_effort_greedy,610,1632 1986 2474 1842
+4,best_effort_greedy,611,2292 1732 1617 1059
+4,best_effort_greedy,612,2303 1822 2426 2452
+4,best_effort_greedy,613,1829 1176 1562 1535
+4,best_effort_greedy,614,1008 2356 2302 1808
+4,best_effort_greedy,615,2314 2501 2338 1060
+4,best_effort_greedy,616,1791 2496 1857 2047
+4,best_effort_greedy,617,1960 1287 2084 2246
+4,best_effort_greedy,618,1175 1991 2513 1436
+4,best_effort_greedy,619,2238 968 2520 2353
+4,best_effort_greedy,620,2526 2489 1903 1900
+4,best_effort_greedy,621,2210 1993 1541 2536
+4,best_effort_greedy,622,2541 2465 1922 2291
+4,best_effort_greedy,623,2275 1514 1974 1245
+4,best_effort_greedy,624,630 1586 2549 1400
+4,best_effort_greedy,625,1268 1522 513 2407
+4,best_effort_greedy,626,881 1569 1860 2000
+4,best_effort_greedy,627,2190 780 2289 1720
+4,best_effort_greedy,628,1680 2166 1646 2012
+4,best_effort_greedy,629,1460 2293 1517 2355
+4,best_effort_greedy,630,1115 2479 2043 2471
+4,best_effort_greedy,631,1910 1684 1015 1858
+4,best_effort_greedy,632,2551 1909 1921 678
+4,best_effort_greedy,633,1658 2094 2121 2203
+4,best_effort_greedy,634,1897 1985 1217 2143
+4,best_effort_greedy,635,1836 1838 2174 2464
+4,best_effort_greedy,636,1956 1661 1509 2523
+4,best_effort_greedy,637,1580 2337 1137 1397
+4,best_effort_greedy,638,2183 1348 2414 2332
+4,best_effort_greedy,639,1442 1809 2458 216
+8,best_effort_greedy,0,3 56 7 104 96 113 19 32
+8,best_effort_greedy,1,1 0 4 211 93 26 30 2
+8,best_effort_greedy,2,5 136 63 74 16 270 61 66
+8,best_effort_greedy,3,55 24 117 22 83 198 219 31
+8,best_effort_greedy,4,25 17 15 35 190 11 125 23
+8,best_effort_greedy,5,52 197 47 181 116 34 143 265
+8,best_effort_greedy,6,46 57 60 78 37 12 28 99
+8,best_effort_greedy,7,91 54 294 128 236 354 102 45
+8,best_effort_greedy,8,8 261 68 10 20 97 130 291
+8,best_effort_greedy,9,21 58 9 53 51 27 259 29
+8,best_effort_greedy,10,286 411 132 522 428 435 112 303
+8,best_effort_greedy,11,42 242 176 200 228 227 18 33
+8,best_effort_greedy,12,169 39 76 322 162 254 324 295
+8,best_effort_greedy,13,36 94 140 293 64 776 400 13
+8,best_effort_greedy,14,49 40 120 82 217 179 278 2240
+8,best_effort_greedy,15,134 202 409 75 314 532 328 257
+8,best_effort_greedy,16,350 62 87 196 235 285 319 84
+8,best_effort_greedy,17,43 147 387 381 50 70 578 172
+8,best_effort_greedy,18,6 151 107 249 121 305 405 234
+8,best_effort_greedy,19,556 343 394 368 332 177 240 330
+8,best_effort_greedy,20,308 483 832 226 426 2109 335 384
+8,best_effort_greedy,21,608 437 267 883 355 430 1153 154
+8,best_effort_greedy,22,191 432 266 954 753 507 1464 1353
+8,best_effort_greedy,23,321 398 374 359 606 346 182 413
+8,best_effort_greedy,24,90 203 152 115 106 927 114 79
+8,best_effort_greedy,25,309 528 642 336 95 88 161 173
+8,best_effort_greedy,26,1009 860 1146 1867 604 1226 800 1282
+8,best_effort_greedy,27,284 1167 614 573 2160 349 250 1700
+8,best_effort_greedy,28,282 448 352 1589 1177 41 726 643
+8,best_effort_greedy,29,550 1742 244 290 366 1315 1076 972
+8,best_effort_greedy,30,145 168 318 148 81 127 159 212
+8,best_effort_greedy,31,141 215 882 554 334 1112 1117 306
+8,best_effort_greedy,32,273 1172 1078 1630 1061 470 1505 1143
+8,best_effort_greedy,33,388 139 399 520 241 195 156 184
+8,best_effort_greedy,34,65 525 908 1602 1377 1148 1482 1633
+8,best_effort_greedy,35,220 144 77 48 281 269 178 175
+8,best_effort_greedy,36,541 591 288 944 534 482 600 111
+8,best_effort_greedy,37,71 338 108 260 345 410 98 205
+8,best_effort_greedy,38,371 331 575 1819 1144 498 1825 383
+8,best_effort_greedy,39,277 297 101 347 157 446 252 110
+8,best_effort_greedy,40,363 1335 2297 2223 945 2078 1438 1662
+8,best_effort_greedy,41,403 1582 1843 1490 382 648 1531 1710
+8,best_effort_greedy,42,171 317 326 137 89 149 327 124
+8,best_effort_greedy,43,221 499 92 204 192 275 661 165
+8,best_effort_greedy,44,367 496 233 466 135 644 1491 571
+8,best_effort_greedy,45,698 991 1511 1188 1955 865 356 850
+8,best_effort_greedy,46,1598 786 1957 2228 1738 1208 1605 992
+8,best_effort_greedy,47,395 445 2214 1430 1311 924 1599 1420
+8,best_effort_greedy,48,372 666 581 712 1640 118 518 798
+8,best_effort_greedy,49,80 509 194 276 225 229 183 123
+8,best_effort_greedy,50,391 468 668 479 440 160 517 453
+8,best_effort_greedy,51,238 210 935 292 246 268 727 14
+8,best_effort_greedy,52,418 647 344 414 763 307 103 230
+8,best_effort_greedy,53,2282 1325 1095 1519 1036 1799 1942 224
+8,best_effort_greedy,54,397 1966 264 360 551 1256 579 1626
+8,best_effort_greedy,55,351 333 129 153 187 146 287 323
+8,best_effort_greedy,56,818 1014 2100 1367 553 1368 951 1664
+8,best_effort_greedy,57,524 674 634 795 1057 487 586 424
+8,best_effort_greedy,58,1770 1052 1747 1882 180 918 2427 1567
+8,best_effort_greedy,59,506 458 1462 2547 1712 732 1086 361
+8,best_effort_greedy,60,370 535 155 526 262 186 199 248
+8,best_effort_greedy,61,1453 393 1048 646 2218 806 1496 1379
+8,best_effort_greedy,62,419 222 823 559 375 150 510 312
+8,best_effort_greedy,63,434 484 416 838 495 476 298 654
+8,best_effort_greedy,64,369 610 830 592 815 1456 1944 1209
+8,best_effort_greedy,65,502 1265 1065 537 1031 2460 932 2391
+8,best_effort_greedy,66,325 2085 1332 1784 2475 1727 1634 2354
+8,best_effort_greedy,67,316 72 738 253 341 377 69 214
+8,best_effort_greedy,68,2145 1040 2254 1542 805 716 615 993
+8,best_effort_greedy,69,1663 1182 2553 2070 1636 1439 2325 1566
+8,best_effort_greedy,70,965 866 2099 904 1746 803 1741 1399
+8,best_effort_greedy,71,122 300 443 415 681 536 439 251
+8,best_effort_greedy,72,1901 1066 567 549 2101 454 2285 1319
+8,best_effort_greedy,73,442 2098 1498 1376 1202 2151 1551 2006
+8,best_effort_greedy,74,505 660 485 539 1247 461 750 386
+8,best_effort_greedy,75,480 906 2423 721 841 280 566 669
+8,best_effort_greedy,76,444 340 313 475 611 714 490 283
+8,best_effort_greedy,77,1199 2539 861 2276 2318 1947 720 2279
+8,best_effort_greedy,78,167 255 237 109 216 296 223 209
+8,best_effort_greedy,79,474 1104 2262 1334 781 762 632 1385
+8,best_effort_greedy,80,1701 602 982 412 1735 2351 1525 1423
+8,best_effort_greedy,81,488 1344 747 1737 1937 977 1398 1533
+8,best_effort_greedy,82,1126 2258 1429 790 2542 1895 2159 1448
+8,best_effort_greedy,83,558 826 1650 1090 599 1092 620 892
+8,best_effort_greedy,84,671 875 746 2026 329 1675 1267 489
+8,best_effort_greedy,85,357 942 438 814 1916 2186 1097 1087
+8,best_effort_greedy,86,2524 1501 2045 2013 697 1546 1554 2415
+8,best_effort_greedy,87,320 362 718 193 271 299 618 423
+8,best_effort_greedy,88,429 2298 1299 613 447 2089 1116 1913
+8,best_effort_greedy,89,508 389 2065 871 1000 760 1425 481
+8,best_effort_greedy,90,1691 1138 975 1767 1241 1118 1854 2135
+8,best_effort_greedy,91,952 775 310 1389 1961 729 425 1286
+8,best_effort_greedy,92,1169 619 1573 2142 427 1402 1595 1549
+8,best_effort_greedy,93,545 421 588 940 459 431 2462 1396
+8,best_effort_greedy,94,1938 1461 1875 2300 590 719 2406 2502
+8,best_effort_greedy,95,1203 1850 2074 1820 828 1194 1381 2443
+8,best_effort_greedy,96,1928 1463 1365 1631 854 2002 1068 2035
+8,best_effort_greedy,97,1609 1702 998 1773 1183 2428 2367 1435
+8,best_effort_greedy,98,2476 894 701 587 503 390 471 478
+8,best_effort_greedy,99,465 736 572 456 741 816 1413 950
+8,best_effort_greedy,100,1480 652 231 164 232 208 243 170
+8,best_effort_greedy,101,1446 1465 2440 1532 1433 1643 2477 796
+8,best_effort_greedy,102,617 1178 365 983 704 973 1231 849
+8,best_effort_greedy,103,809 2557 895 1906 1336 2310 1239 1083
+8,best_effort_greedy,104,2163 978 1263 1563 2097 834 486 1197
+8,best_effort_greedy,105,768 2396 665 1912 827 843 1291 1354
+8,best_effort_greedy,106,1369 1193 1308 2491 1156 1322 2267 2422
+8,best_effort_greedy,107,138 804 561 504 650 1296 247 279
+8,best_effort_greedy,108,1419 1041 73 1157 819 1373 1032 1219
+8,best_effort_greedy,109,519 2004 2130 2320 1275 2184 1870 407
+8,best_effort_greedy,110,1668 2110 1257 1038 709 933 1121 1279
+8,best_effort_greedy,111,667 868 1122 758 2086 851 1131 1963
+8,best_effort_greedy,112,1326 1568 2249 1382 856 1386 1452 769
+8,best_effort_greedy,113,2072 938 2023 1529 1218 1147 1035 774
+8,best_effort_greedy,114,2211 1374 1483 1192 2349 1151 1205 961
+8,best_effort_greedy,115,896 670 1485 2265 2036 1454 1228 547
+8,best_effort_greedy,116,2001 1845 2511 2356 655 1601 1288 1427
+8,best_effort_greedy,117,711 1426 1676 1672 543 2077 1356 1416
+8,best_effort_greedy,118,1303 339 142 406 733 218 105 289
+8,best_effort_greedy,119,1600 2296 1792 1641 1349 1274 1001 1855
+8,best_effort_greedy,120,422 560 337 735 799 2545 258 1718
+8,best_effort_greedy,121,1833 1635 1696 1340 2500 859 1837 2401
+8,best_effort_greedy,122,1604 2048 213 1103 1316 1766 2400 511
+8,best_effort_greedy,123,1077 1372 1479 2244 1380 1317 2506 2323
+8,best_effort_greedy,124,867 1408 2196 695 1134 1358 2425 2386
+8,best_effort_greedy,125,396 100 1754 2436 593 455 1180 1679
+8,best_effort_greedy,126,664 564 656 974 2369 955 2432 969
+8,best_effort_greedy,127,552 1271 1649 2333 1127 845 2046 1555
+8,best_effort_greedy,128,794 433 1699 984 1717 1839 1540 659
+8,best_effort_greedy,129,1886 953 1590 2368 863 2431 1346 2199
+8,best_effort_greedy,130,1310 1165 2257 1544 2088 1880 1933 1321
+8,best_effort_greedy,131,1584 1507 1889 500 1412 2202 1259 869
+8,best_effort_greedy,132,989 85 1980 597 2114 1982 1088 2481
+8,best_effort_greedy,133,494 385 542 675 1128 472 555 638
+8,best_effort_greedy,134,692 689 939 1771 639 353 584 687
+8,best_effort_greedy,135,401 2316 315 1170 1164 2259 2389 2025
+8,best_effort_greedy,136,1392 966 1847 1614 493 1387 1682 1716
+8,best_effort_greedy,137,1071 2083 2326 59 872 1378 2558 705
+8,best_effort_greedy,138,562 1713 1677 759 1923 631 2390 2157
+8,best_effort_greedy,139,2348 1611 1929 2340 1705 1409 1457 1028
+8,best_effort_greedy,140,1072 2189 1388 1046 1557 1404 1778 717
+8,best_effort_greedy,141,858 1395 2288 921 512 2482 1330 1013
+8,best_effort_greedy,142,725 1110 1246 1758 1159 1612 1812 901
+8,best_effort_greedy,143,1492 959 1227 2466 1881 976 1978 1795
+8,best_effort_greedy,144,2530 2472 2453 2050 2028 1556 2411 2167
+8,best_effort_greedy,145,755 635 1761 1221 730 516 1136 2051
+8,best_effort_greedy,146,2277 2485 1769 2483 1552 2404 2014 1081
+8,best_effort_greedy,147,1094 1583 1481 2191 2181 625 2358 2420
+8,best_effort_greedy,148,585 1486 690 1919 2399 2540 756 2049
+8,best_effort_greedy,149,707 1868 2136 876 829 986 912 1152
+8,best_effort_greedy,150,1195 1988 1521 1849 1175 1160 2092 1936
+8,best_effort_greedy,151,1075 2405 1242 1948 1338 565 962 958
+8,best_effort_greedy,152,583 1550 1342 623 874 1561 943 812
+8,best_effort_greedy,153,839 2182 2410 1278 2295 2206 1120 1016
+8,best_effort_greedy,154,1244 1410 2210 1024 2321 1607 1874 963
+8,best_effort_greedy,155,2266 785 86 2274 2382 855 1954 1755
+8,best_effort_greedy,156,538 174 601 188 201 272 263 126
+8,best_effort_greedy,157,2384 1876 893 1538 1011 657 2445 1951
+8,best_effort_greedy,158,1360 1814 1904 2403 2226 2124 2187 2134
+8,best_effort_greedy,159,408 722 1800 1512 2081 739 1518 2532
+8,best_effort_greedy,160,980 67 1073 2510 1067 574 1080 1690
+8,best_effort_greedy,161,342 1171 878 1135 885 2034 1526 1471
+8,best_effort_greedy,162,2155 1743 997 2378 1967 1688 2217 2360
+8,best_effort_greedy,163,627 1731 771 679 680 737 728 886
+8,best_effort_greedy,164,533 569 700 1105 1055 612 2141 835
+8,best_effort_greedy,165,946 1648 1443 2096 2434 1969 2364 1236
+8,best_effort_greedy,166,1983 1352 2195 1407 2329 2507 1473 1971
+8,best_effort_greedy,167,2158 1079 2031 402 788 1805 1232 302
+8,best_effort_greedy,168,2227 1163 598 1359 1515 2148 1896 1603
+8,best_effort_greedy,169,464 2319 1034 2457 1235 1536 1062 2179
+8,best_effort_greedy,170,2512 2171 460 1318 1848 1109 2442 1375
+8,best_effort_greedy,171,1606 636 772 1161 2170 1488 2176 930
+8,best_effort_greedy,172,451 1759 1516 2455 477 570 929 937
+8,best_effort_greedy,173,1196 1587 1440 1484 1835 1451 706 2336
+8,best_effort_greedy,174,928 911 1248 2522 594 1230 1752 801
+8,best_effort_greedy,175,2154 2456 1058 1240 1350 1625 2201 887
+8,best_effort_greedy,176,2309 2033 1725 2020 1786 1281 1129 1846
+8,best_effort_greedy,177,870 672 2105 2047 2355 1616 2235 2200
+8,best_effort_greedy,178,723 158 563 985 2286 807 731 185
+8,best_effort_greedy,179,920 1902 1200 1294 891 744 2366 2221
+8,best_effort_greedy,180,1774 2108 1751 702 2379 1807 1828 782
+8,best_effort_greedy,181,1497 1293 1017 1264 778 1189 1119 1796
+8,best_effort_greedy,182,791 2112 662 713 1476 1302 1324 1266
+8,best_effort_greedy,183,752 1574 931 404 557 452 378 311
+8,best_effort_greedy,184,529 923 1030 2529 2394 1571 1022 1615
+8,best_effort_greedy,185,1133 1750 1329 2061 1292 2080 2435 770
+8,best_effort_greedy,186,358 970 971 926 380 767 820 1581
+8,best_effort_greedy,187,1965 914 2118 2488 1894 1091 1788 1125
+8,best_effort_greedy,188,463 905 734 853 764 1528 2115 2487
+8,best_effort_greedy,189,239 548 568 1370 1018 2175 605 2339
+8,best_effort_greedy,190,1233 1357 846 999 2021 2106 1361 1821
+8,best_effort_greedy,191,922 1724 163 1685 521 1495 1004 877
+8,best_effort_greedy,192,685 1926 694 1977 2335 523 793 364
+8,best_effort_greedy,193,1628 1450 2324 2359 1260 2165 1524 436
+8,best_effort_greedy,194,1467 1130 1817 1070 2017 1224 1780 1911
+8,best_effort_greedy,195,1627 1355 1223 1025 847 1418 1237 2018
+8,best_effort_greedy,196,1101 1945 1347 1362 2137 1003 1383 936
+8,best_effort_greedy,197,2022 2245 1285 1661 792 1111 1184 1777
+8,best_effort_greedy,198,379 441 256 813 206 301 879 497
+8,best_effort_greedy,199,1608 2402 1927 2193 1021 1665 1647 2417
+8,best_effort_greedy,200,761 2252 1186 1545 2120 1044 925 492
+8,best_effort_greedy,201,1255 683 1728 1472 1592 1290 1804 1863
+8,best_effort_greedy,202,1006 1043 1809 473 1964 1826 2019 1269
+8,best_effort_greedy,203,691 898 1304 968 1775 979 1642 1797
+8,best_effort_greedy,204,2393 2222 2161 1039 2461 873 2113 1252
+8,best_effort_greedy,205,2251 1887 1216 2015 2343 1891 840 1384
+8,best_effort_greedy,206,837 1328 1537 1185 1222 1920 2528 1956
+8,best_effort_greedy,207,580 663 491 2271 1823 2253 1811 1093
+8,best_effort_greedy,208,514 1658 1123 1998 1931 1500 1618 2548
+8,best_effort_greedy,209,1258 688 1089 1729 1249 2322 1115 1432
+8,best_effort_greedy,210,1327 2058 1970 2173 1576 2331 2038 1651
+8,best_effort_greedy,211,751 910 2370 1745 1020 1214 1405 897
+8,best_effort_greedy,212,2220 1474 1644 2470 1831 1333 2060 1502
+8,best_effort_greedy,213,1523 1925 996 1487 2247 2312 616 1768
+8,best_effort_greedy,214,1449 2555 2357 1049 1934 1441 1562 1914
+8,best_effort_greedy,215,1428 1238 637 2535 831 629 1915 1162
+8,best_effort_greedy,216,773 1878 676 1578 2505 1414 1782 941
+8,best_effort_greedy,217,527 765 1393 745 1653 1810 1284 1719
+8,best_effort_greedy,218,766 909 981 2073 1694 749 596 710
+8,best_effort_greedy,219,754 2514 1198 822 2419 1841 1215 1856
+8,best_effort_greedy,220,2352 2383 1646 1726 1666 2388 2377 1082
+8,best_effort_greedy,221,2498 1139 449 824 797 1844 2230 1107
+8,best_effort_greedy,222,684 1959 2255 2040 1063 1272 2011 1946
+8,best_effort_greedy,223,1468 2146 2225 2398 1973 1154 1053 1096
+8,best_effort_greedy,224,1999 2041 2075 995 2261 1714 2308 1760
+8,best_effort_greedy,225,1827 626 1692 1832 1037 2062 1212 1997
+8,best_effort_greedy,226,2418 2205 2207 1939 1972 1575 1124 1655
+8,best_effort_greedy,227,1261 1564 1762 2538 2164 1341 44 1470
+8,best_effort_greedy,228,621 2307 1620 531 748 577 1871 1415
+8,best_effort_greedy,229,1459 1579 1822 1893 2204 1621 622 1698
+8,best_effort_greedy,230,1424 864 2486 1862 1785 1706 628 1220
+8,best_effort_greedy,231,899 947 1829 1629 2534 1173 2303 2497
+8,best_effort_greedy,232,682 2123 2064 1527 2063 1469 934 2490
+8,best_effort_greedy,233,1816 1277 1765 1830 1190 2345 1158 724
+8,best_effort_greedy,234,457 987 915 1225 1594 2132 703 595
+8,best_effort_greedy,235,857 1141 833 2421 1207 1624 1320 1962
+8,best_effort_greedy,236,1730 783 2501 2314 1917 2229 1695 1585
+8,best_effort_greedy,237,696 1363 1394 1140 2024 1879 964 2503
+8,best_effort_greedy,238,1493 1217 888 2039 2397 1622 2236 469
+8,best_effort_greedy,239,2185 2153 2559 2430 2104 2468 2027 1543
+8,best_effort_greedy,240,462 1447 1234 1351 1681 1262 789 2469
+8,best_effort_greedy,241,1941 1842 1548 1251 1577 2515 1174 2438
+8,best_effort_greedy,242,967 1985 2304 1704 1348 1757 2127 2071
+8,best_effort_greedy,243,2290 678 1798 1204 1851 2273 2144 576
+8,best_effort_greedy,244,658 1659 2441 2289 808 1434 1709 2447
+8,best_effort_greedy,245,651 2311 1051 1280 1026 1431 2052 1403
+8,best_effort_greedy,246,450 1686 2232 810 1411 1864 1787 1861
+8,best_effort_greedy,247,948 2107 603 2484 2224 1300 2241 1808
+8,best_effort_greedy,248,862 2066 2495 2362 1898 2057 2149 2554
+8,best_effort_greedy,249,1084 1996 2525 1865 779 2376 1905 1191
+8,best_effort_greedy,250,1958 1132 1943 1989 1445 1645 1307 1610
+8,best_effort_greedy,251,1824 1002 1401 540 2209 1818 1273 1617
+8,best_effort_greedy,252,1593 2213 2508 852 673 2465 530 848
+8,best_effort_greedy,253,1990 2363 2268 2076 1890 2526 1623 1504
+8,best_effort_greedy,254,2450 1992 2517 1276 1099 1674 743 1660
+8,best_effort_greedy,255,2385 1436 515 1708 1900 825 913 2043
+8,best_effort_greedy,256,392 2531 640 1313 916 609 589 907
+8,best_effort_greedy,257,467 1586 1572 2095 1858 2233 1245 501
+8,best_effort_greedy,258,1005 1102 513 1522 2556 1489 2375 2283
+8,best_effort_greedy,259,900 1064 1213 2116 1339 1106 2174 2139
+8,best_effort_greedy,260,1908 1753 420 2008 2459 2138 1888 417
+8,best_effort_greedy,261,2380 2480 2231 2242 1790 1179 2250 2131
+8,best_effort_greedy,262,2248 2140 1907 2243 2068 903 881 1560
+8,best_effort_greedy,263,2317 582 686 1569 2301 1114 1869 1142
+8,best_effort_greedy,264,677 844 1764 1935 742 1371 1530 2143
+8,best_effort_greedy,265,821 1045 1023 2263 1558 990 1877 1975
+8,best_effort_greedy,266,1312 1619 2550 1656 1693 633 2133 1588
+8,best_effort_greedy,267,1168 2162 1243 2395 1789 2117 2042 1513
+8,best_effort_greedy,268,1343 2464 2119 2409 1314 1749 1570 956
+8,best_effort_greedy,269,1301 2416 1565 960 2172 802 2346 2003
+8,best_effort_greedy,270,1406 1779 1801 376 1444 1309 1744 1689
+8,best_effort_greedy,271,131 245 207 189 693 624 2518 649
+8,best_effort_greedy,272,2056 1047 1866 2473 777 1211 1711 1949
+8,best_effort_greedy,273,842 1098 544 2054 1715 1652 1201 1150
+8,best_effort_greedy,274,1250 2215 2270 1229 1748 2067 1932 1721
+8,best_effort_greedy,275,641 2458 2281 1794 902 2492 2284 1736
+8,best_effort_greedy,276,1391 1732 38 2292 2519 1638 919 2178
+8,best_effort_greedy,277,1559 2527 1056 1994 2168 2520 1475 1390
+8,best_effort_greedy,278,1987 1074 2010 2188 1298 2444 2451 2030
+8,best_effort_greedy,279,1331 836 2238 949 1884 2177 2194 1632
+8,best_effort_greedy,280,2059 2408 1137 2294 2544 1417 2156 1952
+8,best_effort_greedy,281,2197 2150 2305 917 1924 757 2216 2069
+8,best_effort_greedy,282,1639 1520 1859 1596 2256 1781 1793 1460
+8,best_effort_greedy,283,2315 2478 1100 2344 957 1442 1289 1553
+8,best_effort_greedy,284,2093 2090 2372 2541 2467 1783 2353 1853
+8,best_effort_greedy,285,1366 1953 1981 715 811 2302 274 1739
+8,best_effort_greedy,286,1506 2198 2219 1910 1734 1960 1287 1503
+8,best_effort_greedy,287,2037 2330 2239 2516 2350 2332 373 2269
+8,best_effort_greedy,288,1968 889 884 2102 1297 2521 1397 2374
+8,best_effort_greedy,289,546 784 1007 2533 1857 1455 2439 1722
+8,best_effort_greedy,290,1678 2347 1815 2032 1802 1085 2103 1756
+8,best_effort_greedy,291,1254 1050 2016 2509 2537 2280 1940 994
+8,best_effort_greedy,292,1010 2208 1671 1508 880 1306 699 1993
+8,best_effort_greedy,293,787 2029 1514 2275 1669 2328 2452 708
+8,best_effort_greedy,294,2449 1637 1776 2212 2499 2412 2437 1422
+8,best_effort_greedy,295,1834 2471 1499 630 1986 2121 1206 2053
+8,best_effort_greedy,296,1029 2087 1509 1670 1683 1534 1918 1657
+8,best_effort_greedy,297,2306 1015 2381 1597 645 2183 1723 1813
+8,best_effort_greedy,298,166 2079 2552 1697 2299 1892 1547 1680
+8,best_effort_greedy,299,1852 1059 2407 1270 2044 1740 1950 1873
+8,best_effort_greedy,300,1930 2523 2479 1019 2536 1345 1541 1836
+8,best_effort_greedy,301,1145 1466 1535 2260 2005 1253 1803 817
+8,best_effort_greedy,302,2128 2272 653 1613 2192 2091 1806 2126
+8,best_effort_greedy,303,1149 2125 1069 1054 1687 2313 2122 1210
+8,best_effort_greedy,304,1673 1703 2549 1012 1176 1984 2190 2493
+8,best_effort_greedy,305,2448 2169 2009 2334 2546 1421 2424 2489
+8,best_effort_greedy,306,2129 2543 2429 1033 1979 2055 1478 304
+8,best_effort_greedy,307,1872 1113 2494 1187 2496 1791 2446 1684
+8,best_effort_greedy,308,133 1591 1883 2007 1921 1763 2246 2237
+8,best_effort_greedy,309,1840 1181 2082 1909 2012 2337 2551 1268
+8,best_effort_greedy,310,1510 2287 1707 2454 2084 2342 1042 1283
+8,best_effort_greedy,311,1108 2371 1720 1885 1477 2513 1295 1060
+8,best_effort_greedy,312,1305 119 1166 1337 2414 890 2504 780
+8,best_effort_greedy,313,1539 1654 1772 2392 607 1027 2433 2278
+8,best_effort_greedy,314,1008 1400 2180 2166 1733 1897 2291 1976
+8,best_effort_greedy,315,2426 1922 1364 2361 2341 2264 1580 2373
+8,best_effort_greedy,316,2234 1458 2338 1995 2327 1323 1667 988
+8,best_effort_greedy,317,2413 1155 1838 2203 1517 2463 2147 348
+8,best_effort_greedy,318,1974 2152 2000 2365 2387 1437 1860 740
+8,best_effort_greedy,319,2474 2094 1494 1899 1991 1903 2293 2111
+16,best_effort_greedy,0,3 56 7 104 96 113 19 32 93 1 211 0 4 26 2 30
+16,best_effort_greedy,1,5 136 63 74 16 270 61 66 25 35 17 15 47 190 11 23
+16,best_effort_greedy,2,55 24 117 22 83 198 219 31 46 291 10 324 34 125 116 181
+16,best_effort_greedy,3,52 197 58 9 8 97 45 102 42 37 169 39 76 29 27 308
+16,best_effort_greedy,4,91 54 294 128 236 354 120 78 57 60 13 411 286 132 522 428
+16,best_effort_greedy,5,21 51 53 94 36 140 64 12 50 99 400 162 43 1078 70 41
+16,best_effort_greedy,6,20 68 75 409 202 130 295 134 309 18 319 33 84 177 240 330
+16,best_effort_greedy,7,28 151 267 114 79 437 608 356 305 850 277 6 49 107 121 234
+16,best_effort_greedy,8,259 388 321 350 62 87 265 303 606 90 147 322 387 229 77 179
+16,best_effort_greedy,9,143 318 372 95 148 81 127 268 281 212 159 154 168 249 245 110
+16,best_effort_greedy,10,556 343 394 368 314 575 332 395 2476 157 257 328 71 182 346 413
+16,best_effort_greedy,11,112 278 141 798 215 762 1136 82 217 145 254 459 405 360 470 1792
+16,best_effort_greedy,12,261 171 317 124 135 149 326 299 89 137 327 255 180 2406 80 248
+16,best_effort_greedy,13,191 432 266 954 753 507 1464 1353 458 426 480 716 532 832 226 1676
+16,best_effort_greedy,14,1009 860 1146 1867 604 1226 800 1282 972 951 366 1315 525 1377 1148 1117
+16,best_effort_greedy,15,284 1167 614 573 2160 349 250 1700 2163 1519 1133 2427 1701 1770 698 1799
+16,best_effort_greedy,16,282 448 352 359 374 666 398 491 768 980 618 444 726 643 1589 429
+16,best_effort_greedy,17,550 1742 244 290 65 506 1462 944 370 541 482 288 591 534 111 40
+16,best_effort_greedy,18,483 826 600 543 1819 345 377 1426 1196 361 2240 1165 1672 1640 1379 1702
+16,best_effort_greedy,19,273 1172 1630 1061 963 1664 1244 1218 908 579 1505 1143 1147 1202 1482 1942
+16,best_effort_greedy,20,242 253 165 252 443 415 109 103 307 176 200 333 228 115 152 203
+16,best_effort_greedy,21,220 144 269 48 142 199 101 175 209 146 161 173 88 193 126 105
+16,best_effort_greedy,22,106 363 654 369 233 320 351 129 587 367 335 138 384 496 644 139
+16,best_effort_greedy,23,338 316 276 410 108 260 256 178 186 155 123 183 235 241 298 184
+16,best_effort_greedy,24,371 331 498 816 1824 341 1314 665 1912 421 545 1354 1071 1041 1419 488
+16,best_effort_greedy,25,285 263 69 174 156 312 170 283 300 122 538 187 246 225 336 362
+16,best_effort_greedy,26,403 1582 98 205 289 339 1843 382 1490 904 404 965 355 1153 648 547
+16,best_effort_greedy,27,306 224 1190 2072 938 818 2036 1983 1367 2085 1598 1208 553 2267 1634 945
+16,best_effort_greedy,28,221 499 172 2462 845 238 495 476 434 484 416 342 92 535 474 412
+16,best_effort_greedy,29,391 468 668 479 440 160 517 453 323 297 913 494 353 519 588 466
+16,best_effort_greedy,30,418 647 344 414 2223 763 1947 2553 572 752 598 1014 1375 1603 2279 1076
+16,best_effort_greedy,31,2282 1325 1095 1420 1446 786 2557 809 1118 895 1492 1906 1966 397 1256 1336
+16,best_effort_greedy,32,524 674 634 795 1057 487 586 424 1063 419 1895 952 509 2277 918 1052
+16,best_effort_greedy,33,194 271 118 223 272 201 185 383 150 164 231 232 218 72 243 188
+16,best_effort_greedy,34,264 792 420 1048 733 725 2413 973 1820 2074 2265 671 896 518 508 1453
+16,best_effort_greedy,35,1531 1666 2360 1068 514 465 1209 1944 1773 502 1599 851 924 1901 950 1036
+16,best_effort_greedy,36,227 380 392 206 385 584 689 692 447 732 613 2089 617 558 1116 1178
+16,best_effort_greedy,37,551 1945 1101 1454 2034 1224 1369 454 1928 1662 1439 1438 2276 1663 1566 1003
+16,best_effort_greedy,38,528 790 1429 1448 2159 1126 2258 2542 2006 1240 1083 1252 991 1227 1812 2393
+16,best_effort_greedy,39,325 1332 1784 2475 1727 1094 1636 1435 1688 1938 1831 2354 1199 2078 1335 1965
+16,best_effort_greedy,40,646 1874 2405 888 1203 712 1856 1228 1628 729 2436 1800 1512 2065 807 1551
+16,best_effort_greedy,41,2145 1040 2254 1542 805 615 993 1881 1583 2146 1534 940 86 1066 2211 1465
+16,best_effort_greedy,42,442 1746 1545 1971 1538 1011 1741 1356 2109 2028 1606 1679 1629 2445 1876 2384
+16,best_effort_greedy,43,776 2399 2540 2001 994 1483 2026 574 1340 1275 67 2184 625 1376 2170 1342
+16,best_effort_greedy,44,2228 1738 1605 1957 2113 393 791 992 2148 2547 711 964 213 830 1604 1097
+16,best_effort_greedy,45,505 660 485 539 1247 461 750 386 754 1108 292 533 636 736 578 989
+16,best_effort_greedy,46,1456 1776 652 2023 1529 1850 1554 1998 667 868 2154 774 2021 1122 815 1194
+16,best_effort_greedy,47,167 210 935 2172 869 657 719 871 1324 1480 1259 1024 1859 2422 425 2271
+16,best_effort_greedy,48,571 510 561 1090 1092 892 920 670 1030 893 1013 1549 718 781 2524 1265
+16,best_effort_greedy,49,296 131 599 59 489 849 887 703 375 389 486 423 544 685 512 302
+16,best_effort_greedy,50,357 1399 192 696 455 1168 1612 1948 1231 1242 1334 1430 677 2130 1302 1718
+16,best_effort_greedy,51,313 340 475 662 2487 2481 1710 275 446 158 562 408 490 714 1988 593
+16,best_effort_greedy,52,435 728 1032 1724 661 886 820 1484 1593 1381 1865 838 1338 565 2086 1303
+16,best_effort_greedy,53,2297 1423 2446 709 1735 2202 1412 1525 982 1837 1288 2351 563 602 1584 1855
+16,best_effort_greedy,54,1691 1138 975 1767 1241 2135 1854 2500 1755 590 529 923 1319 1144 1609 1556
+16,best_effort_greedy,55,806 1590 870 1123 672 1267 329 681 1886 2349 1916 1087 438 2444 700 1086
+16,best_effort_greedy,56,1169 619 814 2214 2460 722 2186 2182 839 1472 1728 1592 1980 932 2118 998
+16,best_effort_greedy,57,153 441 695 347 867 1408 1748 959 2196 1077 796 1557 2348 1778 769 1072
+16,best_effort_greedy,58,2443 1380 2244 1365 854 2002 2250 1031 1349 2323 2506 2300 720 2435 2035 1170
+16,best_effort_greedy,59,196 222 823 1740 862 2066 1213 1969 559 1329 1675 1846 1457 1497 1459 1959
+16,best_effort_greedy,60,2101 1511 1188 2206 1955 1361 592 999 2431 2227 1882 2155 1747 969 1581 1433
+16,best_effort_greedy,61,14 1972 767 987 406 697 457 402 1753 1255 701 2352 2283 1121 611 1279
+16,best_effort_greedy,62,1668 2110 1257 1038 1183 1937 1533 1750 2285 1346 2189 2440 958 1374 933 567
+16,best_effort_greedy,63,827 427 1391 779 1964 2100 1219 2049 1961 552 2218 1463 2051 1496 1293 549
+16,best_effort_greedy,64,430 847 431 1573 2142 1418 492 208 564 664 1491 1131 601 1355 2556 2421
+16,best_effort_greedy,65,1326 1568 2249 1382 856 1386 1452 2386 2175 939 1388 1833 2151 1635 358 1814
+16,best_effort_greedy,66,620 1045 2147 2220 2529 390 452 1160 365 503 471 481 760 631 2259 2060
+16,best_effort_greedy,67,1600 2296 1180 1774 1507 1889 891 1424 500 842 1311 1548 1251 1777 1974 1184
+16,best_effort_greedy,68,422 560 337 735 799 2545 258 1331 520 929 195 748 311 287 399 301
+16,best_effort_greedy,69,310 1389 775 1299 1627 2448 1665 1021 1567 1343 687 739 585 1230 642 239
+16,best_effort_greedy,70,2477 583 1550 1177 407 691 610 675 2532 916 2116 2340 581 251 1236 464
+16,best_effort_greedy,71,396 100 1754 536 967 2020 2457 1829 1958 630 462 1652 1962 1933 1416 1321
+16,best_effort_greedy,72,794 433 1699 984 1717 1839 1540 659 2331 2371 1493 2315 2045 1159 1501 2022
+16,best_effort_greedy,73,280 880 1195 2420 1521 1764 1028 1990 684 1310 279 450 2248 2165 1312 858
+16,best_effort_greedy,74,1182 1406 1322 1308 2491 2199 1618 1468 2410 2058 1327 1970 2173 2048 2400 1766
+16,best_effort_greedy,75,865 1022 2247 2432 656 1473 1911 707 2318 2498 1139 1152 783 1151 451 1286
+16,best_effort_greedy,76,401 2316 1461 1105 1689 537 2255 1569 1192 1786 1481 970 1378 1682 1716 1515
+16,best_effort_greedy,77,1392 966 2310 2266 2201 1000 1847 713 1637 1625 2073 1479 744 2366 1474 1902
+16,best_effort_greedy,78,2530 2472 1705 2309 901 831 1075 2461 2253 756 2039 2322 1729 1890 859 1409
+16,best_effort_greedy,79,755 635 1761 1221 730 516 1471 2521 1204 2070 1795 1467 2017 2013 1385 2038
+16,best_effort_greedy,80,2004 2320 2308 1206 931 1528 2403 906 1904 2024 1432 2256 566 857 1523 381
+16,best_effort_greedy,81,1532 1643 1771 639 2454 1371 1142 582 2245 1154 1926 2119 2261 1624 1017 1530
+16,best_effort_greedy,82,986 829 912 1370 1868 1029 948 1836 771 2136 679 2401 1870 680 1449 2088
+16,best_effort_greedy,83,746 875 885 1594 1431 2083 2353 1023 2302 1894 1827 2047 1919 1212 1863 2391
+16,best_effort_greedy,84,1360 761 2367 1508 315 751 2292 2428 1205 1768 2415 580 605 632 1200 1769
+16,best_effort_greedy,85,627 1731 576 2177 1114 2522 1658 747 2067 2424 2096 1344 2434 1866 834 546
+16,best_effort_greedy,86,803 1806 1743 927 1207 439 1074 2423 2387 914 1387 1818 467 1065 837 1197
+16,best_effort_greedy,87,946 1330 1264 1469 622 1373 1674 2358 1093 478 1115 682 2123 1648 1650 2508
+16,best_effort_greedy,88,1157 73 1987 1156 819 1405 2495 2127 2010 2114 2243 1266 1653 782 1695 1487
+16,best_effort_greedy,89,2158 1079 2031 2120 1669 1488 930 2207 2394 890 1402 925 785 833 1782 941
+16,best_effort_greedy,90,511 1428 1103 1316 2106 2466 2237 1832 955 1357 1233 1301 1535 626 846 1963
+16,best_effort_greedy,91,2512 1845 1794 2171 2380 1892 1107 1871 460 655 1345 848 1601 1415 1968 1427
+16,best_effort_greedy,92,928 911 1248 594 801 773 473 477 1006 947 663 378 721 922 530 852
+16,best_effort_greedy,93,1929 2482 1632 2479 921 1785 1862 861 1395 1817 2288 2325 2539 1537 1317 1035
+16,best_effort_greedy,94,723 526 589 456 741 1758 784 907 717 640 926 650 1018 1905 1362 1129
+16,best_effort_greedy,95,1120 2025 2486 1749 569 1053 2131 1404 1046 1250 1655 1848 2385 2241 2538 1615
+16,best_effort_greedy,96,1368 1978 853 764 905 974 1610 1907 2037 1223 2370 2056 1646 637 1127 1587
+16,best_effort_greedy,97,2167 2411 2329 2195 2507 2242 1816 1246 2140 1359 1930 1081 1633 2231 1711 1135
+16,best_effort_greedy,98,1967 2252 2417 2098 1657 2402 348 874 2011 2092 2093 1044 1067 2191 1936 1398
+16,best_effort_greedy,99,1058 1350 2456 2286 1690 1198 2274 2382 1216 749 1825 1249 1704 1089 1725 1608
+16,best_effort_greedy,100,463 2356 1796 1358 2425 2046 1134 1413 1641 2363 1623 1644 2164 1341 44 2449
+16,best_effort_greedy,101,2336 1119 778 1737 548 568 2270 1290 710 2301 1941 2377 2388 1102 1394 2390
+16,best_effort_greedy,102,204 497 1931 633 2548 879 2324 2550 894 2133 2447 1588 1614 2236 493 2099
+16,best_effort_greedy,103,379 745 1284 1719 1765 527 765 835 612 2071 1235 1062 1158 1631 669 1393
+16,best_effort_greedy,104,876 629 2122 1225 915 472 540 1088 85 1287 909 1027 757 917 2235 1616
+16,best_effort_greedy,105,2251 1887 2343 1891 2129 1274 1307 1276 1099 743 2535 2222 1403 2451 2469 1807
+16,best_effort_greedy,106,706 1112 334 1950 882 2319 1726 2468 2104 789 1281 1813 937 616 1234 1351
+16,best_effort_greedy,107,770 1927 1128 1238 2544 1125 2176 2081 1150 1091 1509 2383 797 793 758 2128
+16,best_effort_greedy,108,1258 688 1285 1085 1810 2379 523 1300 1010 1869 2208 1073 1527 555 1997 942
+16,best_effort_greedy,109,1039 971 1621 2281 2033 2188 1298 1059 1363 1952 2359 1626 727 1260 957 1698
+16,best_effort_greedy,110,542 1098 1084 1485 2398 1973 683 1055 1834 2442 2181 1106 2239 1715 1547 1518
+16,best_effort_greedy,111,1372 1851 2014 1254 570 802 1996 623 1175 777 694 1005 1425 1037 1975 1877
+16,best_effort_greedy,112,766 596 2484 1804 2224 2515 2438 1712 2059 2369 2161 1149 953 1849 1262 1001
+16,best_effort_greedy,113,978 1546 1543 1478 2280 759 1124 1946 2087 1576 1835 2375 2040 2430 1277 2052
+16,best_effort_greedy,114,690 1620 1109 1318 376 603 1352 2107 1049 1951 1450 1495 1004 1999 1760 1486
+16,best_effort_greedy,115,866 1514 1082 883 990 804 825 1667 1414 364 2115 1575 900 2505 2153 2108
+16,best_effort_greedy,116,1896 1498 1574 1739 977 1681 734 1215 960 676 2473 1043 1571 2117 1578 521
+16,best_effort_greedy,117,2230 1476 1923 1857 1273 2112 844 863 1797 237 621 2314 821 1268 1504 597
+16,best_effort_greedy,118,2502 2488 1759 2418 1069 1296 1434 2317 2226 1289 1994 247 1555 2234 1898 899
+16,best_effort_greedy,119,230 2341 1684 1651 715 2326 1660 609 166 2079 2470 1333 1830 1687 2185 1366
+16,best_effort_greedy,120,1563 1683 2187 2134 1263 2124 658 2441 2257 1659 1179 1536 2041 2075 2450 1841
+16,best_effort_greedy,121,1110 449 1559 2321 1232 997 1390 1823 877 702 1793 1992 1364 638 1060 1002
+16,best_effort_greedy,122,2485 1191 2064 1639 2018 2333 2141 1649 2397 1516 2262 2499 2339 822 1016 1852
+16,best_effort_greedy,123,1261 1564 1762 1502 373 1893 2205 2298 1579 1291 2204 2416 1935 1757 2412 1622
+16,best_effort_greedy,124,1982 864 1703 2368 1914 1561 1572 2376 1788 1585 1730 595 2198 2219 1611 2533
+16,best_effort_greedy,125,1780 1595 1775 1304 1141 968 2520 1410 962 1864 2044 2210 1878 2233 2229 2374
+16,best_effort_greedy,126,873 704 2514 983 1732 2419 1443 2392 2212 2263 2452 304 2080 1723 1292 1815
+16,best_effort_greedy,127,2290 678 1526 1798 2559 2295 2162 1607 1853 274 1828 1673 1932 2030 995 2157
+16,best_effort_greedy,128,651 813 2311 2132 1020 1051 1104 1458 737 1280 1872 1489 1113 2082 897 961
+16,best_effort_greedy,129,2389 2497 2003 641 2126 1560 2269 2303 2463 1271 812 1822 1201 501 2528 1054
+16,best_effort_greedy,130,628 1220 2029 1007 1811 1779 1722 787 828 1442 910 1173 2490 2313 1444 1309
+16,best_effort_greedy,131,1162 898 843 2016 855 1954 2179 2342 2305 1064 2328 1713 1524 1421 1513 1171
+16,best_effort_greedy,132,1875 1826 985 780 1383 936 2459 2062 2138 1670 2015 2193 1269 2525 2345 1977
+16,best_effort_greedy,133,1500 1709 2378 2217 1844 1960 577 811 738 2395 943 2437 2008 1210 2200 2061
+16,best_effort_greedy,134,1925 996 2287 1422 1913 1696 1339 881 686 2068 1860 903 2055 1880 531 1707
+16,best_effort_greedy,135,1908 1733 1897 1645 1552 2404 708 2541 979 2364 1445 1883 2519 1879 2483 2513
+16,best_effort_greedy,136,445 624 504 207 189 214 216 262 981 1313 1736 1132 1943 693 2407 1278
+16,best_effort_greedy,137,554 919 2178 38 515 1685 1522 934 889 2094 436 2275 2137 788 2053 2327
+16,best_effort_greedy,138,2077 1475 1455 2439 1821 1544 1441 2396 2152 2503 1214 1186 1451 2050 2453 1245
+16,best_effort_greedy,139,1161 1253 1803 2338 2501 1756 1787 1920 1708 2063 1070 2335 1899 1924 1130 2197
+16,best_effort_greedy,140,1602 840 2054 2551 1229 2215 1411 2121 1861 1305 1012 878 1745 1096 1597 2103
+16,best_effort_greedy,141,2531 1140 1840 2337 1734 1297 2264 1909 1565 2090 1921 2517 2555 772 1802 1694
+16,best_effort_greedy,142,1934 2492 1050 742 2471 2534 2102 2213 1189 824 1541 1985 1678 2174 2510 2458
+16,best_effort_greedy,143,1789 1714 1744 1801 724 817 2273 2095 884 1677 2007 1809 1596 1033 1763 2372
+16,best_effort_greedy,144,705 2019 1915 1155 1939 2232 1440 1686 810 1295 2433 2511 1570 808 417 1181
+16,best_effort_greedy,145,2558 1447 1400 1949 2552 1993 1100 2344 2478 2516 1506 1111 1661 2076 1706 1320
+16,best_effort_greedy,146,1751 2357 1477 2350 2306 1671 1185 1328 1721 1080 1026 2465 2209 673 1981 1953
+16,best_effort_greedy,147,1163 1580 1752 1790 1272 2346 2493 1654 2312 1510 2294 1217 1499 1019 2190 607
+16,best_effort_greedy,148,2097 1056 1885 2527 2168 1693 1494 2139 2032 1166 2027 1222 2260 2005 2304 2474
+16,best_effort_greedy,149,2284 2091 2509 2537 2221 1436 1553 2414 1520 1940 557 1460 1187 2299 2355 902
+16,best_effort_greedy,150,163 1397 1680 119 2150 2069 2216 836 2149 2554 1888 2009 2334 1917 2429 2543
+16,best_effort_greedy,151,2467 2268 1808 1347 2504 2238 949 1884 2194 2546 1647 1034 2180 1781 1562 2278
+16,best_effort_greedy,152,2144 2105 1193 1145 2409 513 1539 1243 956 1306 699 1042 2464 1805 1294 1176
+16,best_effort_greedy,153,1407 1991 1015 2381 469 2203 1417 1989 2361 1613 1956 1239 1470 988 1976 2291
+16,best_effort_greedy,154,1401 1047 1008 2347 2496 1384 1237 2330 1918 872 1858 1577 1174 1642 1772 1791
+16,best_effort_greedy,155,976 2042 731 1503 2408 1323 1164 1638 2373 2293 1517 1873 2426 2307 1396 1697
+16,best_effort_greedy,156,2169 1900 2111 1903 1270 1910 2526 1591 2489 2365 2000 1211 645 1586 1025 2156
+16,best_effort_greedy,157,653 841 1692 1995 1619 2057 1984 2192 2549 2166 2043 2523 740 2246 2084 1617
+16,best_effort_greedy,158,649 1466 1348 2480 1783 2272 2143 2455 1922 1986 1842 2125 2332 2289 2494 1720
+16,best_effort_greedy,159,133 2012 1838 293 2183 1437 1656 1337 2518 2362 2536 2225 1283 1558 1137 1979
+32,best_effort_greedy,0,3 56 7 104 96 113 19 32 93 1 211 0 4 26 2 30 66 25 23 45 190 17 117 125 46 55 102 35 270 10 27 24
+32,best_effort_greedy,1,5 136 63 74 16 61 34 22 20 18 47 143 181 51 198 83 240 116 265 53 294 21 29 91 58 9 54 354 120 286 128 52
+32,best_effort_greedy,2,37 12 64 50 169 76 39 57 60 28 99 219 31 291 78 162 394 13 36 94 140 43 147 324 400 303 387 90 130 202 8 134
+32,best_effort_greedy,3,15 159 77 33 319 212 178 129 68 126 42 184 95 127 242 176 200 228 300 144 179 62 229 194 225 227 245 121 110 249 6 107
+32,best_effort_greedy,4,49 40 350 285 1916 506 370 87 1589 643 2240 726 1462 796 282 41 1778 746 393 2228 1598 1097 346 1542 458 305 84 149 321 259 322 806
+32,best_effort_greedy,5,11 191 426 432 403 257 328 532 411 522 132 428 435 112 352 70 528 295 480 236 145 254 359 798 459 82 177 330 197 266 391 414
+32,best_effort_greedy,6,556 343 395 2476 332 1599 502 698 656 1358 865 1420 220 499 873 2282 1209 1944 284 290 1799 2145 367 1491 571 2101 550 366 388 1531 1519 648
+32,best_effort_greedy,7,308 483 832 226 335 384 138 137 111 371 97 419 2109 252 646 157 165 233 573 372 827 278 331 208 250 2160 482 541 155 535 316 351
+32,best_effort_greedy,8,608 437 267 883 355 430 1153 154 1770 356 114 79 168 106 152 146 115 338 108 405 215 288 260 345 88 234 71 89 48 327 167 255
+32,best_effort_greedy,9,261 171 317 124 135 299 326 466 526 523 248 199 251 80 509 271 180 244 65 151 297 277 101 850 360 264 347 241 301 423 205 92
+32,best_effort_greedy,10,75 409 1009 860 800 1226 604 1282 306 1117 972 951 1867 818 525 1172 273 1148 579 1505 908 1664 1315 1630 1147 1143 470 1482 1218 217 1377 1078
+32,best_effort_greedy,11,309 642 1540 1120 2025 336 161 173 235 272 160 263 201 123 183 383 185 150 193 298 312 103 307 253 310 98 122 186 443 333 382 218
+32,best_effort_greedy,12,141 882 741 893 2063 529 665 1369 590 1928 454 998 599 1609 923 1662 1727 1700 1438 1439 2524 2223 2276 553 1634 1076 1146 1014 1501 2013 551 1423
+32,best_effort_greedy,13,363 1335 2297 1061 1236 1855 1385 1327 1876 1942 963 1199 2279 2001 2354 1293 2323 2070 1663 1182 2553 786 1636 1446 1600 1538 2006 2477 1340 1264 2325 2557
+32,best_effort_greedy,14,374 398 491 618 578 429 1159 671 340 444 896 296 606 662 2112 527 362 924 434 980 768 342 418 838 416 484 221 495 476 654 472 344
+32,best_effort_greedy,15,172 238 845 2462 210 505 461 750 2321 935 292 246 268 518 718 510 375 69 341 187 222 269 14 283 620 318 148 81 439 281 681 421
+32,best_effort_greedy,16,397 1966 1256 2159 2258 1126 1429 1906 1901 1367 2542 895 2191 1365 1679 1606 973 1083 992 1511 86 2359 1626 1492 991 1983 1202 2023 1481 1933 1208 2028
+32,best_effort_greedy,17,314 575 766 1157 1275 1870 507 182 2110 413 1419 1052 918 1464 1041 73 819 1459 1373 498 1376 1032 453 1496 2420 67 1094 1195 2026 952 1747 442
+32,best_effort_greedy,18,524 674 634 795 1490 1938 1403 1843 368 396 2202 613 2545 2220 815 1456 701 1036 1362 944 369 989 950 224 2072 2201 1625 587 904 320 1668 1038
+32,best_effort_greedy,19,1453 2218 1086 361 732 2277 231 1480 1265 1242 1742 1863 2096 1426 1092 2460 1068 2516 1075 2405 2349 1131 954 2530 1374 2211 1556 1319 1144 415 1614 1183
+32,best_effort_greedy,20,325 2085 1332 349 2410 614 410 849 858 728 1167 488 2163 2427 866 965 1701 803 1882 1388 2227 1746 1833 1691 1133 1066 770 1741 1048 2382 1567 940
+32,best_effort_greedy,21,666 581 712 1640 118 1233 1825 1329 1357 1467 1676 2532 1856 1895 425 1203 2422 1675 1497 1819 1379 1566 1969 1965 1551 1071 2558 2436 1628 2506 2083 1180
+32,best_effort_greedy,22,203 206 158 422 337 339 142 256 175 153 379 275 302 195 139 109 311 258 313 72 446 538 188 408 243 170 204 214 216 389 508 174
+32,best_effort_greedy,23,776 2399 2540 994 2089 1997 2488 1354 2537 1919 1058 1409 474 1424 842 705 424 1240 1810 586 357 670 1399 1299 1988 871 2039 756 625 2448 1350 2309
+32,best_effort_greedy,24,558 826 1650 1090 447 192 481 1168 1718 692 939 689 1077 2035 617 2066 1116 2113 2393 1500 517 1231 2348 1138 1430 1334 1612 479 1302 1013 739 1948
+32,best_effort_greedy,25,647 457 600 440 723 621 816 519 2130 2004 545 468 583 534 591 672 870 1850 667 1194 834 716 752 552 868 615 2021 623 1123 1563 1941 622
+32,best_effort_greedy,26,1169 619 814 2214 2182 839 1472 2186 2142 1573 2118 1278 2295 1728 1592 2467 427 762 1222 984 794 1702 433 1824 1005 1221 755 1549 2265 2082 2521 1937
+32,best_effort_greedy,27,2443 1380 2244 1817 2115 2435 1290 2002 1381 720 1205 2098 593 1862 2300 861 2539 1785 1317 2148 1372 1006 2078 2336 2231 1633 1398 1947 2155 1743 1244 1395
+32,best_effort_greedy,28,602 982 412 230 763 639 386 353 494 687 399 503 390 471 385 584 406 580 276 485 629 539 754 695 223 209 247 279 452 404 232 378
+32,best_effort_greedy,29,196 530 597 792 239 2463 431 585 1963 751 1031 1827 1936 478 644 1160 2230 1923 1039 2390 2048 516 1311 2358 1093 611 1584 1507 475 1088 729 969
+32,best_effort_greedy,30,465 736 572 456 2360 1413 937 402 1666 589 859 2500 1837 1360 1288 2267 1158 1755 2386 856 1435 1326 663 1557 2401 1072 1151 2417 1390 1773 2444 2088
+32,best_effort_greedy,31,809 1095 1325 1336 1488 930 668 1844 853 1716 1139 1387 1529 2151 2136 2375 1780 1224 1964 2170 938 1595 1448 1356 1000 790 1161 2106 1342 1368 2290 1392
+32,best_effort_greedy,32,329 1267 694 520 651 496 1851 932 875 616 1324 1905 1758 1886 1782 1646 1308 928 1255 1874 1705 777 652 1024 1465 2116 2271 1084 2017 1582 2022 1737
+32,best_effort_greedy,33,448 1414 1575 407 1177 489 557 2251 473 773 691 2206 1526 1287 592 477 793 486 1627 697 1433 1581 1704 2431 1532 1055 1957 1081 711 1645 2248 1552
+32,best_effort_greedy,34,1118 1823 887 1270 1089 1479 2310 2266 280 2073 1797 680 1854 2428 1241 975 1767 2153 1266 2135 901 1310 1165 783 490 2196 438 2498 1408 1880 2120 761
+32,best_effort_greedy,35,1303 945 995 1001 1402 2154 1518 1156 166 1375 725 1816 2100 1228 1641 869 1804 1349 1792 1515 914 1292 1896 1951 1999 1795 1784 1736 2031 1682 1881 2075
+32,best_effort_greedy,36,1604 547 2288 2015 1406 1322 1227 1035 1122 549 1186 1848 1428 1891 567 1457 2184 1711 1735 1959 1525 707 854 1103 2400 764 1516 1603 1537 1378 1766 1011
+32,best_effort_greedy,37,867 628 1220 2249 2167 2411 1107 1127 1601 1774 702 2108 1751 1971 2329 2453 970 358 2050 2195 1188 781 561 1594 925 788 2303 1016 455 2339 1955 921
+32,best_effort_greedy,38,664 564 974 787 2369 955 2511 693 847 1418 857 2421 1355 1530 1008 851 2512 612 464 1710 1025 1223 2481 1643 1814 1219 1198 2470 2049 846 719 2018
+32,best_effort_greedy,39,2086 565 807 632 962 1338 1484 886 1196 315 1672 543 709 986 829 912 1200 948 1045 1257 933 1291 682 1125 677 1152 1713 401 562 2331 1769 1314
+32,best_effort_greedy,40,2045 1082 601 2037 835 2307 323 1022 2529 820 636 1544 2176 1765 2313 492 844 533 1690 2099 2391 1212 1037 1489 2556 2502 2378 1931 1249 1040 2060 1725
+32,best_effort_greedy,41,559 1521 2356 1849 377 2438 1175 1238 1712 1812 2515 1468 1121 1775 2107 1028 1649 1945 563 1003 2034 1101 1958 1279 1961 2224 2204 2241 1210 1665 2351 690
+32,best_effort_greedy,42,1461 537 1105 993 1689 2175 605 941 2286 1696 1875 1498 44 1569 493 897 1826 1583 805 2164 1341 888 1512 2081 1800 946 1344 1929 960 943 1493 1913
+32,best_effort_greedy,43,966 2472 2236 1847 1415 1312 1190 1918 1980 1431 2487 2061 1655 1483 2395 2394 1331 1846 774 2181 59 2014 2177 917 1463 1330 1469 2461 1513 747 659 1527
+32,best_effort_greedy,44,2384 1593 1865 2380 1454 2036 2376 2315 2158 1427 1648 304 2547 767 1719 2480 2062 1353 2425 1067 1080 852 2345 2046 862 1108 381 380 727 971 791 1977
+32,best_effort_greedy,45,627 1731 771 511 1259 876 1316 927 679 1852 775 1004 1495 737 2122 2275 436 779 1207 2123 640 1318 2157 757 1622 661 1301 936 1104 1051 683 675
+32,best_effort_greedy,46,451 1286 1112 706 1471 2367 2199 710 2038 1759 2197 738 1914 2440 2415 641 769 797 2185 2335 1878 293 1281 929 1053 1623 2051 1154 1204 730 596 1620
+32,best_effort_greedy,47,2406 1184 2020 837 1197 1328 2140 364 1260 1724 700 1777 1371 1924 1065 1474 1254 2437 1920 892 2200 885 577 2146 2262 1786 1273 1960 2208 2302 568 1811
+32,best_effort_greedy,48,920 1546 1748 1179 840 1602 2198 2219 1611 1411 894 1417 1734 1134 1178 1806 1554 1506 2318 1898 2187 1967 1688 1894 1412 1111 1790 959 2161 1917 1934 1911
+32,best_effort_greedy,49,289 105 441 450 1686 2024 500 813 1018 926 514 685 721 759 765 546 748 745 810 119 1568 812 2385 576 684 1029 956 1145 782 987 392 2531
+32,best_effort_greedy,50,463 905 1796 734 744 1821 2473 274 699 1750 2285 1533 2352 1346 1730 1940 1425 1975 1635 2383 1787 1745 1973 1361 999 1753 1671 1366 2377 1441 2189 1828
+32,best_effort_greedy,51,922 1591 2346 1932 910 2370 2068 2344 570 863 753 595 131 703 512 1050 802 825 610 830 1449 560 2482 733 1049 722 785 1309 1130 676 1079 1534
+32,best_effort_greedy,52,1416 2374 1128 1927 445 1925 1768 1829 1629 899 947 1248 2093 2011 2131 1830 1834 2409 996 1839 1717 2067 931 348 1173 2402 967 1624 2065 1400 1872 536
+32,best_effort_greedy,53,1754 1230 2079 1343 2551 1694 749 1818 2398 1096 909 2298 2278 588 2483 467 1586 2544 902 555 2071 1276 1274 1578 1216 2010 983 1114 2522 2485 449 831
+32,best_effort_greedy,54,1608 2193 1021 1539 1268 784 911 365 760 2077 1261 1455 1475 1234 1351 985 1046 1404 2538 2059 1884 2475 1831 1383 1820 2074 1528 1889 1699 2104 2430 1189
+32,best_effort_greedy,55,487 1771 649 1466 1443 2165 2454 2441 658 2257 2124 2226 2403 2289 1659 1091 1761 1502 1994 1776 460 2134 1683 2254 2127 1510 1939 1258 1698 1524 2287 2041
+32,best_effort_greedy,56,655 1345 1808 1170 1968 884 2319 977 1615 2457 1962 1805 2418 1057 1069 889 822 1687 1739 934 2306 1485 1555 789 1550 1922 2324 633 1062 1235 669 2333
+32,best_effort_greedy,57,1912 1407 2138 2217 2459 1129 2044 2404 1304 906 1124 2256 743 2008 2247 1574 2114 1099 2478 1904 2033 1191 964 1953 1140 1163 1738 631 1613 2445 598 731
+32,best_effort_greedy,58,542 1098 1087 1714 715 1201 2047 2424 462 2447 1946 1789 1393 1740 2501 1432 1978 2133 2040 2364 1135 2340 1410 1576 1835 1890 1277 2412 2056 1757 2171 548
+32,best_effort_greedy,59,1073 2510 1709 574 1879 696 1394 1363 2429 2029 1307 2087 1193 2505 2503 2442 2102 778 1877 2389 1813 1779 1801 953 900 1164 2368 85 2097 1149 582 521
+32,best_effort_greedy,60,1523 1535 1486 1064 626 1832 1864 2207 1085 1450 2032 1478 1543 2280 2076 714 2468 334 2027 657 638 38 554 915 2305 843 1605 2069 2543 2432 1639 2312
+32,best_effort_greedy,61,978 1119 660 1732 2292 1695 2255 2495 1987 2242 2490 1063 2210 1074 1440 1587 1749 2388 2232 1162 1391 2243 1558 2396 942 1907 2507 903 1239 2446 1651 1250
+32,best_effort_greedy,62,287 594 708 880 2330 540 1401 801 1263 1866 1460 1729 1136 891 2520 2126 1669 1033 1560 1333 2269 1171 2092 1246 2541 799 976 2080 1930 1859 1564 1893
+32,best_effort_greedy,63,1110 1422 2469 2466 1296 1706 1142 1019 1166 2111 1305 2456 1545 2252 1579 2408 1981 1982 1548 2053 609 673 2465 501 1610 2284 990 2450 1321 1722 2327 2373
+32,best_effort_greedy,64,566 645 2397 1509 2283 1590 2064 2119 1284 2464 2179 1007 2261 2128 758 2162 1685 877 1536 958 1793 879 1020 607 1214 635 1027 2270 1213 823 1010 653
+32,best_effort_greedy,65,2379 1807 997 2343 2190 828 1174 1444 2536 1723 1708 740 724 1956 2517 1674 1992 2129 1715 2326 1476 2372 1660 1487 2365 1106 1452 1386 1150 919 874 2215
+32,best_effort_greedy,66,1990 2363 2268 1654 1030 2156 1229 1002 515 2296 1565 1520 1280 2471 742 2416 2245 1436 1553 1215 2030 2221 630 1294 2534 1232 1023 2514 913 1840 1499 1056
+32,best_effort_greedy,67,1631 650 2294 1697 1703 1762 1017 2304 821 2314 949 1113 907 704 808 855 1504 1681 2320 1970 1996 1871 2173 1109 2518 2005 2260 1868 1352 2526 1100 2229
+32,best_effort_greedy,68,1359 2172 1503 1618 1752 1251 1974 1667 957 1070 1572 2451 1206 1842 1012 878 1382 213 2003 2528 988 2225 1952 2169 469 1211 1570 890 1237 1384 1998 373
+32,best_effort_greedy,69,1908 1733 1897 1034 531 1607 1853 686 420 1597 1638 848 1559 1726 1657 881 811 1637 544 2492 1721 2350 1616 1300 637 2439 713 2253 1271 2016 898 1822
+32,best_effort_greedy,70,2317 1026 2316 100 1247 2549 2497 979 1252 1245 717 2233 2095 2009 2234 2554 1561 2272 1680 1547 2484 1060 1347 2334 1976 163 2222 2423 817 497 2508 1902
+32,best_effort_greedy,71,1926 1693 2274 2509 2203 688 1670 2426 1447 2371 1396 1950 1225 2132 376 1494 864 1588 833 1141 1644 916 2141 2250 1873 2455 1320 1658 513 1313 2237 1522
+32,best_effort_greedy,72,1798 1176 1562 1364 2535 1954 1692 1756 2328 841 2413 2357 836 504 624 2489 1984 2559 2103 2494 1115 2366 961 1764 1935 2149 2449 2548 1909 1289 1888 872
+32,best_effort_greedy,73,1473 1059 1653 2188 1298 1571 2019 1915 1043 1949 1760 1155 1580 2392 2246 2084 1809 1283 2407 2525 1269 1042 2238 2342 1339 2491 569 1297 2264 1861 1445 1989
+32,best_effort_greedy,74,237 156 164 133 207 262 189 1972 981 1187 2347 2235 804 1678 1015 1132 2205 1677 2259 772 2419 1841 1619 735 1295 1102 2144 1434 2000 1763 1788 1585
+32,best_effort_greedy,75,2301 2533 2012 2166 1508 1243 1652 2168 2192 2308 1044 1047 2414 2519 1054 2058 2513 1887 1285 2007 2273 2552 2147 1421 2322 1192 1985 2054 1370 1943 2474 1458
+32,best_effort_greedy,76,2139 1470 2381 1860 2527 2213 1791 1642 1857 2496 2105 2355 1253 1621 1858 1262 1707 1986 1869 1661 1323 2090 1883 2180 1577 1185 2291 1836 1781 1596 1306 1389
+32,best_effort_greedy,77,1673 2299 1921 2555 1802 2178 2137 1815 2057 603 1451 1405 2042 2387 1892 417 2239 2043 2353 2523 968 1794 2281 1783 1845 2458 2433 2117 2150 2216 2338 2143
+32,best_effort_greedy,78,2212 2499 2194 2091 2094 2121 1979 1632 1397 2263 2332 2504 2486 1348 780 2311 2452 2479 1995 824 1477 1885 1838 1517 2174 1993 2546 1514 1137 1217 2341 2361
+32,best_effort_greedy,79,2434 1656 2550 2052 1899 1272 2125 2493 678 1647 1617 2183 1437 1181 2055 2209 1720 1337 1803 1991 1442 2362 1903 1900 2337 1684 1744 1910 2293 1772 2152 1541
